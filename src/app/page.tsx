@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowUpRight, Moon, Sparkles } from "lucide-react";
-import { getStore, usingSupabase } from "@/lib/store";
+import { getStore, storageMode } from "@/lib/store";
 import { formatDate, formatDateShort } from "@/lib/format";
 import { PLATFORM_LABELS, PLATFORMS, type PostSummary } from "@/lib/types";
 
@@ -48,9 +48,9 @@ export default async function Home() {
           </p>
           <h1 className="font-serif text-4xl text-foreground md:text-5xl">Content Central</h1>
         </div>
-        {!usingSupabase() && (
+        {storageMode() !== "supabase" && (
           <span className="rounded-full border border-border bg-surface px-3 py-1 font-mono text-[11px] text-muted">
-            local mode
+            {storageMode()} storage
           </span>
         )}
       </header>

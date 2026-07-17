@@ -63,8 +63,78 @@ class SupabaseStore implements Store {
   }
 }
 
+/* ---------------------------- Vercel Blob ----------------------------- */
+/* Used when Supabase is not configured but BLOB_READ_WRITE_TOKEN is.      */
+/* One JSON document; every write creates a fresh unique URL (no stale CDN */
+/* reads) and deletes the previous version afterwards.                     */
+
+const BLOB_PREFIX = "db/posts-";
+
+class BlobStore implements Store {
+  private async readAll(): Promise<PostRow[]> {
+    const { list } = await import("@vercel/blob");
+    const { blobs } = await list({ prefix: BLOB_PREFIX });
+    if (blobs.length === 0) return [];
+    const latest = [...blobs].sort(
+      (a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime()
+    )[0];
+    const res = await fetch(latest.url, { cache: "no-store" });
+    if (!res.ok) throw new Error(`Blob read failed: ${res.status}`);
+    return (await res.json()) as PostRow[];
+  }
+
+  private async writeAll(rows: PostRow[]): Promise<void> {
+    const { list, put, del } = await import("@vercel/blob");
+    const { blobs: previous } = await list({ prefix: BLOB_PREFIX });
+    await put(`${BLOB_PREFIX}${Date.now()}.json`, JSON.stringify(rows, null, 2), {
+      access: "public",
+      contentType: "application/json",
+      addRandomSuffix: true,
+    });
+    if (previous.length > 0) {
+      await del(previous.map((b) => b.url));
+    }
+  }
+
+  async listSummaries(): Promise<PostSummary[]> {
+    const rows = await this.readAll();
+    return rows
+      .sort((a, b) => b.date.localeCompare(a.date))
+      .map(({ date, topic, status }) => ({ date, topic, status: { ...EMPTY_STATUS, ...status } }));
+  }
+
+  async getPost(date: string): Promise<PostRow | null> {
+    const rows = await this.readAll();
+    const row = rows.find((r) => r.date === date);
+    return row ? { ...row, status: { ...EMPTY_STATUS, ...row.status } } : null;
+  }
+
+  async upsertPost(bundle: ContentBundle): Promise<void> {
+    const rows = await this.readAll();
+    const next = rows.filter((r) => r.date !== bundle.date);
+    next.push({ ...bundle, status: EMPTY_STATUS, created_at: new Date().toISOString() });
+    await this.writeAll(next);
+  }
+
+  async listTopics(): Promise<{ date: string; topic: string }[]> {
+    const rows = await this.readAll();
+    return rows
+      .sort((a, b) => b.date.localeCompare(a.date))
+      .map(({ date, topic }) => ({ date, topic }));
+  }
+
+  async updateStatus(date: string, platform: Platform, posted: boolean): Promise<PostStatus | null> {
+    const rows = await this.readAll();
+    const row = rows.find((r) => r.date === date);
+    if (!row) return null;
+    row.status = { ...EMPTY_STATUS, ...row.status, [platform]: posted };
+    await this.writeAll(rows);
+    return row.status;
+  }
+}
+
 /* ------------------------- Local file fallback ------------------------- */
-/* Used when Supabase env vars are absent (local dev before setup).        */
+/* Used when neither Supabase nor Blob is configured (local dev).          */
 
 const DATA_FILE = path.join(process.cwd(), ".data", "posts.json");
 
@@ -123,14 +193,22 @@ class FileStore implements Store {
 
 let store: Store | null = null;
 
-export function getStore(): Store {
-  if (store) return store;
-  const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  store = url && key ? new SupabaseStore(url, key) : new FileStore();
-  return store;
+export type StorageMode = "supabase" | "blob" | "local";
+
+export function storageMode(): StorageMode {
+  if (process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) return "supabase";
+  if (process.env.BLOB_READ_WRITE_TOKEN) return "blob";
+  return "local";
 }
 
-export function usingSupabase(): boolean {
-  return Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
+export function getStore(): Store {
+  if (store) return store;
+  const mode = storageMode();
+  store =
+    mode === "supabase"
+      ? new SupabaseStore(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+      : mode === "blob"
+        ? new BlobStore()
+        : new FileStore();
+  return store;
 }
