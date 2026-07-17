@@ -6,10 +6,17 @@ import ThemeToggle from "@/components/ThemeToggle";
 
 export const dynamic = "force-dynamic";
 
-function publishedLabel(post: PostSummary): string {
+function publishState(post: PostSummary): { label: string; text: string; line: string } {
   const n = PLATFORMS.filter((p) => post.status[p]).length;
-  if (n === 0) return "not published";
-  return `${n}/${PLATFORMS.length} published`;
+  if (n === 0)
+    return { label: "not published", text: "text-warning", line: "border-warning" };
+  if (n < PLATFORMS.length)
+    return {
+      label: `${n}/${PLATFORMS.length} published`,
+      text: "text-warning",
+      line: "border-warning",
+    };
+  return { label: "published", text: "text-success", line: "border-success" };
 }
 
 export default async function Home() {
@@ -34,7 +41,7 @@ export default async function Home() {
       </header>
 
       {storeError && (
-        <p className="mb-8 border-l-2 border-border pl-4 text-sm text-muted">
+        <p className="mb-8 border-l-2 border-warning pl-4 text-sm text-muted">
           Couldn&apos;t load posts: {storeError}
         </p>
       )}
@@ -54,35 +61,43 @@ export default async function Home() {
           <p className="mb-3 font-mono text-xs uppercase tracking-widest text-muted">
             Latest · {formatDate(latest.date)}
           </p>
-          <Link href={`/post/${latest.date}`} className="group block">
-            <h2 className="font-serif text-2xl leading-snug text-foreground underline-offset-4 group-hover:underline md:text-3xl">
+          <Link
+            href={`/post/${latest.date}`}
+            className={`group block border-l-2 ${publishState(latest).line} pl-5 transition-colors hover:bg-surface`}
+          >
+            <h2 className="py-1 font-serif text-2xl leading-snug text-foreground underline-offset-4 group-hover:underline md:text-3xl">
               {latest.topic}
             </h2>
+            <p className={`pb-1 text-sm ${publishState(latest).text}`}>
+              {publishState(latest).label}
+            </p>
           </Link>
-          <p className="mt-3 text-sm text-muted">{publishedLabel(latest)}</p>
         </section>
       )}
 
       {rest.length > 0 && (
         <section>
-          <p className="mb-2 font-mono text-xs uppercase tracking-widest text-muted">Archive</p>
-          <ul>
-            {rest.map((post) => (
-              <li key={post.date} className="border-t border-border">
-                <Link
-                  href={`/post/${post.date}`}
-                  className="group flex items-baseline justify-between gap-6 py-4"
-                >
-                  <div className="min-w-0">
-                    <p className="truncate text-[15px] text-foreground underline-offset-4 group-hover:underline">
-                      {post.topic}
-                    </p>
-                    <p className="mt-1 text-xs text-muted">{formatDateShort(post.date)}</p>
-                  </div>
-                  <span className="shrink-0 text-xs text-muted">{publishedLabel(post)}</span>
-                </Link>
-              </li>
-            ))}
+          <p className="mb-4 font-mono text-xs uppercase tracking-widest text-muted">Archive</p>
+          <ul className="flex flex-col gap-3">
+            {rest.map((post) => {
+              const state = publishState(post);
+              return (
+                <li key={post.date}>
+                  <Link
+                    href={`/post/${post.date}`}
+                    className={`group flex items-baseline justify-between gap-6 border-l-2 ${state.line} py-2 pl-5 pr-2 transition-colors hover:bg-surface`}
+                  >
+                    <div className="min-w-0">
+                      <p className="truncate text-[15px] text-foreground underline-offset-4 group-hover:underline">
+                        {post.topic}
+                      </p>
+                      <p className="mt-1 text-xs text-muted">{formatDateShort(post.date)}</p>
+                    </div>
+                    <span className={`shrink-0 text-xs ${state.text}`}>{state.label}</span>
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </section>
       )}

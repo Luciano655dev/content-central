@@ -25,8 +25,8 @@ export default function PostView({ post }: { post: PostRow }) {
               }`}
             >
               {PLATFORM_LABELS[p]}
-              {post.status[p] && <Check className="h-3.5 w-3.5 text-muted" />}
-              {tab === p && <span className="absolute inset-x-3 -bottom-px h-px bg-foreground" />}
+              {post.status[p] && <Check className="h-3.5 w-3.5 text-success" />}
+              {tab === p && <span className="absolute inset-x-3 -bottom-px h-px bg-accent" />}
             </button>
           ))}
         </nav>

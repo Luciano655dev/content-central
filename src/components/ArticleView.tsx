@@ -62,11 +62,11 @@ export default function ArticleView({
       </div>
 
       {mode === "preview" ? (
-        <article className="border-t border-border pt-8">
+        <article className="rounded-lg border border-border bg-surface p-6 md:p-8">
           <Markdown>{bodyMarkdown}</Markdown>
         </article>
       ) : (
-        <pre className="overflow-x-auto whitespace-pre-wrap border-t border-border pt-8 font-mono text-sm leading-relaxed text-foreground/90">
+        <pre className="overflow-x-auto whitespace-pre-wrap rounded-lg border border-border bg-code-bg p-6 font-mono text-sm leading-relaxed text-foreground/90">
           {bodyMarkdown}
         </pre>
       )}

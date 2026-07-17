@@ -33,8 +33,10 @@ export default function PostedToggle({
     <button
       onClick={toggle}
       disabled={pending}
-      className={`inline-flex items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-sm transition-colors ${
-        posted ? "text-foreground" : "text-muted hover:text-foreground"
+      className={`inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm transition-colors ${
+        posted
+          ? "border-success/40 bg-success/10 text-success"
+          : "border-border text-muted hover:text-foreground"
       }`}
     >
       {posted && <Check className="h-3.5 w-3.5" />}
