@@ -12,6 +12,14 @@ The bar: content a senior developer would bookmark. If a step's output feels med
 
 Read every file in `playbook/` (topics.md, devto.md, tabnews.md, twitter.md, instagram.md, projects.md). They are your editorial rules; they override any instinct you have.
 
+If you are running WITHOUT the repository cloned (no `playbook/` directory on disk), fetch everything first:
+
+```
+curl -s -H "Authorization: Bearer $INGEST_TOKEN" "$INGEST_URL/api/playbook"
+```
+
+Returns `{"files": {"AGENT.md": "...", "playbook/topics.md": "...", ...}}`. Save each entry to disk at its key's path, then proceed normally.
+
 ## Step 1 — Fetch topic history
 
 ```
