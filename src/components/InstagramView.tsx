@@ -1,6 +1,6 @@
 "use client";
 
-import { MessageSquareText, Palette } from "lucide-react";
+import { Palette } from "lucide-react";
 import CopyButton from "./CopyButton";
 import type { InstagramContent } from "@/lib/types";
 
@@ -11,57 +11,44 @@ export default function InstagramView({ instagram }: { instagram: InstagramConte
 
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between gap-3">
+      <div className="mb-6 flex items-center justify-between gap-3">
         <p className="text-sm text-muted">{instagram.slides.length} slides</p>
         <CopyButton text={allSlides} label="Copy all slides" />
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <ol className="flex flex-col">
         {instagram.slides.map((slide, i) => (
-          <div
-            key={i}
-            className={`flex flex-col rounded-2xl border bg-surface p-5 ${
-              i === 0 ? "border-instagram/40 md:col-span-2" : "border-border"
-            }`}
-          >
-            <div className="mb-3 flex items-center justify-between">
-              <span className="inline-flex items-center gap-2">
-                <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-instagram/15 font-mono text-xs text-instagram">
-                  {i + 1}
-                </span>
-                {i === 0 && (
-                  <span className="rounded-full bg-instagram/15 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-instagram">
-                    Cover · hook
-                  </span>
-                )}
+          <li key={i} className="border-t border-border py-6">
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <span className="font-mono text-xs text-muted">
+                {i + 1}/{instagram.slides.length}
+                {i === 0 && " · cover"}
               </span>
-              <CopyButton text={`${slide.title}\n${slide.body}`} label="Copy" className="!py-1 !text-xs" />
+              <CopyButton text={`${slide.title}\n${slide.body}`} label="Copy" />
             </div>
-            <h3 className={`font-serif text-foreground ${i === 0 ? "text-2xl" : "text-lg"}`}>
+            <h3 className={`max-w-xl font-serif text-foreground ${i === 0 ? "text-2xl" : "text-lg"}`}>
               {slide.title}
             </h3>
-            <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-foreground/85">
+            <p className="mt-2 max-w-xl whitespace-pre-wrap text-sm leading-relaxed text-foreground/90">
               {slide.body}
             </p>
             {slide.visual_tip && (
-              <div className="mt-4 flex items-start gap-2.5 rounded-xl border border-instagram/25 bg-instagram/8 p-3.5">
-                <Palette className="mt-0.5 h-4 w-4 shrink-0 text-instagram" />
-                <p className="text-sm leading-relaxed text-instagram/90">{slide.visual_tip}</p>
+              <div className="mt-4 flex max-w-xl items-start gap-2.5 border-l-2 border-border pl-4">
+                <Palette className="mt-0.5 h-4 w-4 shrink-0 text-muted" />
+                <p className="text-sm leading-relaxed text-muted">{slide.visual_tip}</p>
               </div>
             )}
-          </div>
+          </li>
         ))}
-      </div>
+      </ol>
 
       {instagram.caption && (
-        <div className="mt-6 rounded-2xl border border-border bg-surface p-5">
+        <div className="border-t border-border py-6">
           <div className="mb-3 flex items-center justify-between">
-            <span className="inline-flex items-center gap-2 text-sm text-muted">
-              <MessageSquareText className="h-4 w-4" /> Caption
-            </span>
+            <span className="text-sm text-muted">Caption</span>
             <CopyButton text={instagram.caption} label="Copy caption" />
           </div>
-          <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground/85">
+          <p className="max-w-xl whitespace-pre-wrap text-sm leading-relaxed text-foreground/90">
             {instagram.caption}
           </p>
         </div>

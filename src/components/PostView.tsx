@@ -9,34 +9,24 @@ import InstagramView from "./InstagramView";
 import PostedToggle from "./PostedToggle";
 import { Check } from "lucide-react";
 
-const PLATFORM_DOT: Record<Platform, string> = {
-  devto: "bg-devto",
-  tabnews: "bg-tabnews",
-  twitter: "bg-twitter",
-  instagram: "bg-instagram",
-};
-
 export default function PostView({ post }: { post: PostRow }) {
   const [tab, setTab] = useState<Platform>("devto");
 
   return (
     <div>
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-border">
+      <div className="mb-8 flex flex-wrap items-center justify-between gap-3 border-b border-border">
         <nav className="flex gap-1 overflow-x-auto">
           {PLATFORMS.map((p) => (
             <button
               key={p}
               onClick={() => setTab(p)}
-              className={`relative inline-flex items-center gap-2 whitespace-nowrap px-4 py-3 text-sm transition ${
+              className={`relative inline-flex items-center gap-1.5 whitespace-nowrap px-3 py-3 text-sm transition-colors ${
                 tab === p ? "text-foreground" : "text-muted hover:text-foreground"
               }`}
             >
-              <span className={`h-1.5 w-1.5 rounded-full ${PLATFORM_DOT[p]}`} />
               {PLATFORM_LABELS[p]}
-              {post.status[p] && <Check className="h-3.5 w-3.5 text-tabnews" />}
-              {tab === p && (
-                <span className="absolute inset-x-3 bottom-0 h-0.5 rounded-full bg-accent" />
-              )}
+              {post.status[p] && <Check className="h-3.5 w-3.5 text-muted" />}
+              {tab === p && <span className="absolute inset-x-3 -bottom-px h-px bg-foreground" />}
             </button>
           ))}
         </nav>

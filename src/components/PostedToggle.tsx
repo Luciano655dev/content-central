@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { CheckCircle2, Circle } from "lucide-react";
+import { Check } from "lucide-react";
 import type { Platform } from "@/lib/types";
 
 export default function PostedToggle({
@@ -33,13 +33,11 @@ export default function PostedToggle({
     <button
       onClick={toggle}
       disabled={pending}
-      className={`inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm transition ${
-        posted
-          ? "border-tabnews/40 bg-tabnews/10 text-tabnews"
-          : "border-border bg-surface text-muted hover:border-accent/40 hover:text-foreground"
+      className={`inline-flex items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-sm transition-colors ${
+        posted ? "text-foreground" : "text-muted hover:text-foreground"
       }`}
     >
-      {posted ? <CheckCircle2 className="h-3.5 w-3.5" /> : <Circle className="h-3.5 w-3.5" />}
+      {posted && <Check className="h-3.5 w-3.5" />}
       {posted ? "Posted" : "Mark as posted"}
     </button>
   );
