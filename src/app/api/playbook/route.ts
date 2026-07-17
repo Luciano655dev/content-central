@@ -6,6 +6,9 @@ import { isValidIngestToken } from "@/lib/auth";
 // Serves the editorial playbook to the daily agent so it can run without
 // cloning the repo. Files ship with the deployment via outputFileTracingIncludes.
 export async function GET(request: NextRequest) {
+  console.log(
+    `[playbook] GET ${request.nextUrl.search} auth=${request.headers.get("authorization") ? "yes" : "no"} ua=${request.headers.get("user-agent") ?? "-"}`
+  );
   if (!isValidIngestToken(request.headers.get("authorization"))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }

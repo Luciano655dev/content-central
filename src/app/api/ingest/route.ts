@@ -4,6 +4,9 @@ import { getStore } from "@/lib/store";
 import { validateBundle } from "@/lib/validate";
 
 export async function POST(request: NextRequest) {
+  console.log(
+    `[ingest] POST auth=${request.headers.get("authorization") ? "yes" : "no"} ua=${request.headers.get("user-agent") ?? "-"}`
+  );
   if (!isValidIngestToken(request.headers.get("authorization"))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
