@@ -35,27 +35,41 @@ Follow `playbook/topics.md` exactly: ≥5 candidates from different families, on
 ## Step 3 — Deep research
 
 Research the chosen topic for real (this is what separates you from every generic content bot):
-- Multiple web searches from different angles (spec/docs, postmortems, "common mistakes", benchmarks, source code)
-- Read at least 5 substantial sources; prefer primary ones (RFCs, official docs, engineering blogs, papers)
-- Collect: 2+ concrete examples or war stories, code that actually illustrates the mechanism, at least one number/benchmark/fact that surprises, common misconceptions to debunk
-- Keep a list of the best sources with titles and URLs — they go in `research_sources` (3–8 entries)
+- At least **8 web searches** from different angles (spec/docs, postmortems, "common mistakes", benchmarks, source code, "X at scale", "X war story")
+- Read at least **7 substantial sources**; prefer primary ones (RFCs, official docs, engineering blogs, papers)
+- Collect MORE material than you will use: 3+ concrete examples or war stories with named sources, code that actually illustrates the mechanism, 3+ numbers/benchmarks/facts that surprise, common misconceptions to debunk, at least one real production incident
+- Keep a list of the best sources with titles and URLs — they go in `research_sources` (5–8 entries)
 
 If research reveals the topic is thinner than expected, go back to Step 2 and pick another candidate.
 
 ## Step 4 — Write
 
+### 4a. Outline first
+
+Before any prose, write an outline for the article: the thesis (one surprising sentence), the narrative arc section by section, and — for EACH section — the concrete artifact it will contain (which code example, which war story, which number). A section with no concrete artifact planned gets cut or researched further. The articles are long (see length bars in the playbooks); the outline is what keeps length from becoming padding.
+
+### 4b. Draft all four pieces
+
 Write in this order (each format is a fresh composition, never a compression of the previous one):
-1. **Dev.to post** per `playbook/devto.md` — title, exactly 4 tags, full markdown body
-2. **TabNews post** per `playbook/tabnews.md` — an adaptation for the BR dev community, NOT a translation
+1. **Dev.to post** per `playbook/devto.md` — title, exactly 4 tags, full markdown body, **2,500–4,000 words**
+2. **TabNews post** per `playbook/tabnews.md` — an adaptation for the BR dev community, NOT a translation, **2.000–3.200 palavras**
 3. **Twitter thread** per `playbook/twitter.md` — 5–8 tweets, ≤280 chars each, `image_tip` on tweet 1 and 1–3 others
 4. **Instagram carousel** per `playbook/instagram.md` — 6–10 slides with `visual_tip` each, plus caption
 
 Consider a project mention ONLY per the rules in `playbook/projects.md`. Zero mentions is the default outcome.
 
+### 4c. Expansion pass (articles only)
+
+Go through the Dev.to and TabNews drafts section by section asking: **"What would a senior developer ask here that I haven't answered?"** — then answer it in place, with something concrete. Typical gaps: What does this cost? How do I observe/debug it? When does this advice NOT apply? What's the second-order failure once the first fix is in? This pass should add real substance to most sections, not sand off edges.
+
 ## Step 5 — Self-review (adversarial)
 
 Now switch roles: you are a harsh editor seeing this for the first time. Check:
+- [ ] **Length gates (count the words — actually count, e.g. `wc -w`)**: Dev.to ≥2,500 words; TabNews ≥2.000 palavras. Under the gate = whole sections are missing; go back to the outline and add them (never pad)
+- [ ] **Vagueness scan**: hunt for sentences that could appear in an article about a different topic ("this can cause serious problems", "performance matters") — replace each with a specific fact, number, or example
 - [ ] Dev.to/TabNews: does the FIRST SCREEN hook? If the first 3 lines could open any article on the topic, rewrite them
+- [ ] Reading flow: do the sections form a story where each one creates the question the next answers? Do headers alone read as a coherent outline? Is the rhythm varied (a one-line paragraph after dense ones)?
+- [ ] Every section has at least one concrete artifact (code / number / named case / table / diagram)
 - [ ] Zero filler sentences ("in today's world", "it's important to note", "além disso") — delete on sight
 - [ ] Every technical claim is something you verified in research; numbers have sources
 - [ ] Code examples are correct and minimal — mentally execute each one
