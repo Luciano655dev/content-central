@@ -1,36 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Content Central
 
-## Getting Started
+A daily dev-content studio. Every night at 3:00 AM a Claude Code cloud routine researches one timeless developer topic and writes it four ways:
 
-First, run the development server:
+- **Dev.to** post (English)
+- **TabNews** post (Português, adapted — not translated)
+- **Twitter/X** thread (aggressive tone + image suggestions)
+- **Instagram** carousel plan (slide-by-slide copy + visual direction)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+You open this dashboard, review, and publish with one-click copy buttons.
+
+## How it works
+
+```
+cloud routine (3am, daily)          this app (Vercel)
+┌──────────────────────────┐        ┌─────────────────────────┐
+│ clones this repo         │  GET   │ /api/topics  (dedup)    │
+│ reads AGENT.md +         │───────▶│                         │
+│ playbook/*.md            │  POST  │ /api/ingest  (bundle)   │
+│ researches + writes      │───────▶│      │                  │
+└──────────────────────────┘        │      ▼                  │
+                                    │  Supabase → dashboard   │
+                                    └─────────────────────────┘
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The editorial brain lives in `playbook/` — edit those files to change how the bot picks topics and writes. `AGENT.md` is the routine's step-by-step workflow.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Local development
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm install
+npm run dev
+```
 
-## Learn More
+Without Supabase env vars the app stores posts in `.data/posts.json` (local mode). Seed an example bundle:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+node scripts/seed.mjs   # uses http://localhost:3000 and INGEST_TOKEN=dev-token
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Environment (production)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Var | Purpose |
+| --- | --- |
+| `SUPABASE_URL` | Supabase project URL |
+| `SUPABASE_SERVICE_ROLE_KEY` | Service role key (server-only) |
+| `INGEST_TOKEN` | Bearer token for the daily agent (`openssl rand -hex 32`) |
+| `ACCESS_PASSWORD` | Dashboard login passcode |
+| `SESSION_SECRET` | Signs the session cookie (`openssl rand -hex 32`) |
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Run `supabase/schema.sql` once in the Supabase SQL editor.

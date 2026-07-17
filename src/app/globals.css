@@ -1,26 +1,137 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0b0b0e;
+  --surface: #131318;
+  --surface-2: #1a1a21;
+  --border: #26262e;
+  --foreground: #ececf1;
+  --muted: #8b8b96;
+  --accent: #e8b44c;
+  --devto: #a78bfa;
+  --tabnews: #34d399;
+  --twitter: #38bdf8;
+  --instagram: #f472b6;
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
   --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-devto: var(--devto);
+  --color-tabnews: var(--tabnews);
+  --color-twitter: var(--twitter);
+  --color-instagram: var(--instagram);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-serif: var(--font-newsreader);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
 }
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+/* ---------- Rendered markdown (article previews) ---------- */
+
+.prose-preview {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--foreground);
+}
+.prose-preview h1,
+.prose-preview h2,
+.prose-preview h3,
+.prose-preview h4 {
+  font-family: var(--font-newsreader), Georgia, serif;
+  font-weight: 600;
+  line-height: 1.25;
+  margin: 2em 0 0.6em;
+  color: var(--foreground);
+}
+.prose-preview h1 { font-size: 1.75rem; }
+.prose-preview h2 { font-size: 1.45rem; }
+.prose-preview h3 { font-size: 1.2rem; }
+.prose-preview > :first-child { margin-top: 0; }
+.prose-preview p { margin: 1em 0; }
+.prose-preview a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prose-preview strong { color: var(--foreground); font-weight: 600; }
+.prose-preview ul, .prose-preview ol { margin: 1em 0; padding-left: 1.5em; }
+.prose-preview ul { list-style: disc; }
+.prose-preview ol { list-style: decimal; }
+.prose-preview li { margin: 0.35em 0; }
+.prose-preview blockquote {
+  border-left: 3px solid var(--accent);
+  padding-left: 1em;
+  margin: 1.25em 0;
+  color: var(--muted);
+  font-style: italic;
+}
+.prose-preview hr { border-color: var(--border); margin: 2em 0; }
+.prose-preview code {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.875em;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.15em 0.4em;
+}
+.prose-preview pre {
+  background: #0e0e13;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1em 1.25em;
+  overflow-x: auto;
+  margin: 1.25em 0;
+}
+.prose-preview pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+.prose-preview table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.25em 0;
+  font-size: 0.9rem;
+}
+.prose-preview th, .prose-preview td {
+  border: 1px solid var(--border);
+  padding: 0.5em 0.75em;
+  text-align: left;
+}
+.prose-preview th { background: var(--surface-2); }
+.prose-preview img { max-width: 100%; border-radius: 12px; }
+
+/* ---------- Minimal highlight.js theme (dark) ---------- */
+
+.hljs-comment, .hljs-quote { color: #6b7280; font-style: italic; }
+.hljs-keyword, .hljs-selector-tag, .hljs-subst { color: #c792ea; }
+.hljs-literal, .hljs-number { color: #f78c6c; }
+.hljs-string, .hljs-doctag, .hljs-regexp { color: #a5d6a7; }
+.hljs-title, .hljs-section, .hljs-selector-id { color: #82aaff; }
+.hljs-type, .hljs-class .hljs-title, .hljs-title.class_ { color: #ffcb6b; }
+.hljs-tag, .hljs-name, .hljs-attribute { color: #f07178; }
+.hljs-variable, .hljs-template-variable { color: #eeffff; }
+.hljs-built_in, .hljs-builtin-name { color: #89ddff; }
+.hljs-symbol, .hljs-bullet, .hljs-link { color: #c3e88d; }
+.hljs-meta { color: #7f8ea3; }
+.hljs-deletion { background: rgba(239, 68, 68, 0.15); }
+.hljs-addition { background: rgba(52, 211, 153, 0.15); }
+.hljs-emphasis { font-style: italic; }
+.hljs-strong { font-weight: 600; }
