@@ -3,6 +3,9 @@ import { getStore } from "@/lib/store";
 import { formatDate, formatDateShort } from "@/lib/format";
 import { PLATFORMS, type PostSummary } from "@/lib/types";
 import ThemeToggle from "@/components/ThemeToggle";
+import AutomationControls from "@/components/AutomationControls";
+import DeletePostButton from "@/components/DeletePostButton";
+import { getAutomationState } from "@/lib/automation";
 
 export const dynamic = "force-dynamic";
 
@@ -29,6 +32,7 @@ export default async function Home() {
   }
 
   const [latest, ...rest] = posts;
+  const automation = await getAutomationState();
 
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-12 md:py-16">
@@ -46,11 +50,13 @@ export default async function Home() {
         </p>
       )}
 
+      <AutomationControls initialState={automation} />
+
       {!latest && !storeError && (
         <div className="border-t border-border pt-16 text-center">
           <h2 className="font-serif text-xl text-foreground">Nothing here yet</h2>
           <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-muted">
-            The bot writes every night at 3:00 AM. Your first content drop will appear here —
+            Codex writes every day at 4:00 AM. Your first content drop will appear here —
             researched, written, and ready to review.
           </p>
         </div>
@@ -62,7 +68,7 @@ export default async function Home() {
             Latest · {formatDate(latest.date)}
           </p>
           <Link
-            href={`/post/${latest.date}`}
+            href={`/post/${latest.id}`}
             className={`group block border-l-2 ${publishState(latest).line} pl-5 transition-colors hover:bg-surface`}
           >
             <h2 className="py-1 font-serif text-2xl leading-snug text-foreground underline-offset-4 group-hover:underline md:text-3xl">
@@ -82,10 +88,10 @@ export default async function Home() {
             {rest.map((post) => {
               const state = publishState(post);
               return (
-                <li key={post.date}>
+                <li key={post.id} className="flex items-center gap-1">
                   <Link
-                    href={`/post/${post.date}`}
-                    className={`group flex items-baseline justify-between gap-6 border-l-2 ${state.line} py-2 pl-5 pr-2 transition-colors hover:bg-surface`}
+                    href={`/post/${post.id}`}
+                    className={`group flex min-w-0 flex-1 items-baseline justify-between gap-6 border-l-2 ${state.line} py-2 pl-5 pr-2 transition-colors hover:bg-surface`}
                   >
                     <div className="min-w-0">
                       <p className="truncate text-[15px] text-foreground underline-offset-4 group-hover:underline">
@@ -95,6 +101,7 @@ export default async function Home() {
                     </div>
                     <span className={`shrink-0 text-xs ${state.text}`}>{state.label}</span>
                   </Link>
+                  <DeletePostButton id={post.id} compact />
                 </li>
               );
             })}

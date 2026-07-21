@@ -5,11 +5,11 @@ import { Check } from "lucide-react";
 import type { Platform } from "@/lib/types";
 
 export default function PostedToggle({
-  date,
+  id,
   platform,
   initialPosted,
 }: {
-  date: string;
+  id: string;
   platform: Platform;
   initialPosted: boolean;
 }) {
@@ -20,7 +20,7 @@ export default function PostedToggle({
     const next = !posted;
     setPosted(next);
     startTransition(async () => {
-      const res = await fetch(`/api/posts/${date}/status`, {
+      const res = await fetch(`/api/posts/${encodeURIComponent(id)}/status`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ platform, posted: next }),

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Daily Content"
+  short_description: "Research and ingest one daily content bundle"
+  default_prompt: "Use $daily-content to create and ingest today’s content bundle."

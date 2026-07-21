@@ -7,6 +7,7 @@ import ArticleView from "./ArticleView";
 import TwitterView from "./TwitterView";
 import InstagramView from "./InstagramView";
 import PostedToggle from "./PostedToggle";
+import QuickPostButton from "./QuickPostButton";
 import { Check } from "lucide-react";
 
 export default function PostView({ post }: { post: PostRow }) {
@@ -30,13 +31,9 @@ export default function PostView({ post }: { post: PostRow }) {
             </button>
           ))}
         </nav>
-        <div className="pb-2">
-          <PostedToggle
-            key={tab}
-            date={post.date}
-            platform={tab}
-            initialPosted={post.status[tab]}
-          />
+        <div className="flex items-start gap-3 pb-2">
+          <QuickPostButton post={post} platform={tab} />
+          <PostedToggle key={tab} id={post.id} platform={tab} initialPosted={post.status[tab]} />
         </div>
       </div>
 
@@ -50,8 +47,17 @@ export default function PostView({ post }: { post: PostRow }) {
       {tab === "tabnews" && (
         <ArticleView title={post.tabnews.title} bodyMarkdown={post.tabnews.body_markdown} />
       )}
-      {tab === "twitter" && <TwitterView twitter={post.twitter} />}
-      {tab === "instagram" && <InstagramView instagram={post.instagram} />}
+      {tab === "twitter" && (
+        <TwitterView
+          postId={post.id}
+          slideCount={post.instagram.slides.length}
+          renderRevision={post.instagram.render_revision}
+          twitter={post.twitter}
+        />
+      )}
+      {tab === "instagram" && (
+        <InstagramView postId={post.id} date={post.date} instagram={post.instagram} />
+      )}
     </div>
   );
 }

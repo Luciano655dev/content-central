@@ -6,6 +6,7 @@ Content Central = a Next.js dashboard + an editorial playbook for a daily cloud 
 - `playbook/` + `AGENT.md` — editorial instructions consumed by the daily cloud routine, not by the app. `AGENT.md` is NOT for you unless you were explicitly told you are the daily content agent.
 - `supabase/schema.sql` — database schema
 - `scripts/seed.mjs` — seeds an example bundle into a running instance
+- `.agents/skills/daily-content/` — the Codex workflow used by the local scheduled task
 
 <!-- BEGIN:nextjs-agent-rules -->
 # This is NOT the Next.js you know

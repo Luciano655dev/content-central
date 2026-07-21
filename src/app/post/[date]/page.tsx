@@ -5,14 +5,14 @@ import { getStore } from "@/lib/store";
 import { formatDate } from "@/lib/format";
 import PostView from "@/components/PostView";
 import ThemeToggle from "@/components/ThemeToggle";
+import DeletePostButton from "@/components/DeletePostButton";
 
 export const dynamic = "force-dynamic";
 
 export default async function PostPage(props: { params: Promise<{ date: string }> }) {
-  const { date } = await props.params;
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) notFound();
+  const { date: id } = await props.params;
 
-  const post = await getStore().getPost(date);
+  const post = await getStore().getPost(id);
   if (!post) notFound();
 
   return (
@@ -70,6 +70,7 @@ export default async function PostPage(props: { params: Promise<{ date: string }
       </header>
 
       <PostView post={post} />
+      <DeletePostButton id={post.id} />
     </main>
   );
 }

@@ -4,9 +4,11 @@ What the all-time top Dev.to posts have in common: educational depth + aspiratio
 
 ## The bar
 
-You are writing **the definitive article on this topic** — the one people link to when the subject comes up. **2,500–4,000 words.** If your draft is under 2,500 words, it is not done: it means whole sections of the topic went unexplored, not that the topic is small (a small topic should not have been chosen).
+You are writing the article that gives the reader a useful mental model and something they can apply today. It should feel substantial without feeling like homework: aim for a **4–8 minute read**, usually **1,000–1,700 words**. A flexible **900–2,000 word** band is acceptable when the topic genuinely needs it.
 
-Length must come from depth, never from padding. Every additional paragraph must add a new concrete thing: an example, a failure mode, a number, a piece of code, a decision rule.
+These numbers are editorial guidance, not a rigid pass/fail quota. Never pad a short draft. Never amputate a necessary explanation to hit the ceiling. If the article is running long, narrow the angle, remove repeated examples, and keep the clearest path through the idea. Every paragraph must add a concrete thing: an example, a failure mode, a number, a piece of code, or a decision rule.
+
+The real completeness gate: by the end, the reader can explain the mechanism, use the solution, recognize a production failure mode, and make one concrete engineering decision. A 1,400-word post that does this is better than a 3,000-word encyclopedia.
 
 ## Title
 
@@ -36,12 +38,12 @@ The article must READ like a story the reader can't put down, with each section 
 6. **Common mistakes** — 3–5 specific mistakes with the WHY behind each
 7. **Recap + one takeaway** — "If you remember one thing…" + a genuine question to the reader (comments drive the Dev.to algorithm)
 
-Not every topic maps 1:1 to these seven beats — but the arc (problem → failed naive attempt → mechanism → solution → production reality) is mandatory.
+Not every topic needs seven separate sections. Combine beats when that makes the reading smoother, but preserve the arc: problem → failed naive attempt → mechanism → solution → production reality. Prefer **5–7 purposeful sections** over a long catalogue.
 
 ## Depth requirements (hard rules)
 
-- **Every section contains at least one of**: runnable code, a real number with a source, a war story, a table, or an ASCII diagram. A section that is only prose is a red flag — fix it
-- At least **4 substantial code blocks** across the article — minimal, runnable, language-tagged. Show the BROKEN version first, then the fix; the diff is the lesson
+- Across the article, include at least **3 concrete artifacts**: runnable code, a sourced number, a war story, a table, or an ASCII diagram. Place them where they clarify the argument; do not force one into every short transition section
+- Usually include **2–3 substantial code blocks** — minimal, runnable, language-tagged. When code is the lesson, show the broken version and the fix. When the topic is conceptual, one excellent example plus a diagram may be stronger than artificial code
 - At least **one real-world case** from a named source (engineering blog, postmortem, RFC, official docs) woven into the narrative — "when GitHub hit this in 2018…" beats any abstract explanation
 - **The specificity test**: if a sentence could appear unchanged in an article about a different topic, delete it. "This can cause serious issues in production" — delete. "This holds a connection from the pool for the full 30s timeout, so 40 concurrent retries exhaust a default pg pool" — keep
 
@@ -49,7 +51,7 @@ Not every topic maps 1:1 to these seven beats — but the arc (problem → faile
 
 - Short paragraphs: 1–3 sentences. White space is a feature
 - Vary the rhythm: a one-line paragraph after two dense ones lands like a punch
-- `##` headers every 200–350 words; the headers alone should read as a coherent outline of the argument
+- `##` headers every 180–300 words or whenever the argument turns; the headers alone should read as a coherent outline
 - Use **bold** for the sentences you'd highlight if the reader only skims — one per section, not five
 - Zero filler: no "it's important to note", "in today's fast-paced world", "let's dive in". Every sentence either teaches or moves the story
 

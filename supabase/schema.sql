@@ -2,7 +2,7 @@
 
 create table if not exists public.posts (
   id uuid primary key default gen_random_uuid(),
-  date date not null unique,
+  date date not null,
   topic text not null,
   topic_rationale text not null default '',
   research_sources jsonb not null default '[]',
@@ -17,3 +17,16 @@ create table if not exists public.posts (
 
 -- All access goes through the service role in server code; no public policies.
 alter table public.posts enable row level security;
+
+create unique index if not exists posts_date_topic_key on public.posts (date, topic);
+
+create table if not exists public.automation_settings (
+  id integer primary key check (id = 1),
+  state jsonb not null default '{}',
+  updated_at timestamptz not null default now()
+);
+
+alter table public.automation_settings enable row level security;
+
+-- Migration for databases created with the older one-post-per-day schema:
+alter table public.posts drop constraint if exists posts_date_key;
