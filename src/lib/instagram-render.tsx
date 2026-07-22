@@ -234,7 +234,9 @@ function CodeVisual({ visual }: { visual: Extract<InstagramSlideVisual, { type: 
           display: "flex",
           flexDirection: "column",
           width: "100%",
-          padding: "38px 40px",
+          minHeight: visual.lines.length <= 3 ? 280 : 0,
+          justifyContent: "center",
+          padding: "46px 44px",
           borderLeft: `3px solid ${COLORS.accent}`,
           background: COLORS.panel,
         }}
@@ -245,9 +247,9 @@ function CodeVisual({ visual }: { visual: Extract<InstagramSlideVisual, { type: 
             <span
               key={`${line}-${index}`}
               style={{
-                marginTop: index ? 13 : 0,
+                marginTop: index ? 18 : 0,
                 fontFamily: "IBM Plex Mono",
-                fontSize: line.length > 40 ? 23 : 27,
+                fontSize: line.length > 40 ? 27 : line.length > 28 ? 31 : 35,
                 fontWeight: highlighted ? 500 : 400,
                 lineHeight: 1.38,
                 color: highlighted ? COLORS.accent : COLORS.text,
@@ -1103,7 +1105,7 @@ function MiddleLayout({ slide, balanced }: { slide: InstagramSlide; balanced: bo
           style={{
             display: "flex",
             flex: balanced ? 0 : 1,
-            minHeight: balanced ? 410 : 0,
+            minHeight: balanced ? 470 : 0,
             alignItems: "center",
             marginTop: balanced ? 32 : 24,
           }}
