@@ -119,6 +119,88 @@ const clockSlides = [
   },
 ];
 
+const retrySlides = [
+  {
+    title: "Retries Can Become The Outage",
+    body: "A small overload becomes a feedback loop when every rejected request immediately returns as new traffic.",
+    accent_phrase: "Become The Outage",
+    visual_tip: "Use an asymmetric cover: the claim anchors the left while a branching retry path expands vertically on the right.",
+    visual_plan: plan("Retries can transform recovery traffic into the outage itself.", "feedback and amplification", "illustration", "the branching retry path", "one request becoming repeated load", "the final amplified node", "split_left"),
+    visual: {
+      type: "illustration",
+      label: "ONE FAILURE / REPEATED LOAD",
+      nodes: [
+        { id: "request", label: "REQUEST", detail: "10,100 QPS", x: 18, y: 18 },
+        { id: "failure", label: "FAIL", detail: "+100", x: 50, y: 43 },
+        { id: "retry", label: "RETRY", detail: "10,200", x: 30, y: 74 },
+        { id: "outage", label: "OUTAGE", detail: "growing", x: 78, y: 78, accent: true },
+      ],
+      links: [
+        { from: "request", to: "failure" },
+        { from: "failure", to: "retry" },
+        { from: "failure", to: "outage", accent: true },
+        { from: "retry", to: "outage", accent: true },
+      ],
+    },
+  },
+  {
+    title: "One Failure Becomes New Load",
+    body: "At a 10,000 QPS ceiling, 10,100 arrivals create 100 retries. The next round starts at 10,200 before secondary failures add even more traffic.",
+    accent_phrase: "New Load",
+    visual_tip: "Place the capacity equation across the upper half, then let the explanation resolve directly beneath it as one compact composition.",
+    visual_plan: plan("Rejected requests return above the same fixed capacity ceiling.", "measurement and progression", "numeric", "10,100 becoming 10,200", "the fixed 10,000 QPS capacity", "the second-round load", "visual_top"),
+    visual: { type: "numeric", label: "CAPACITY STAYS AT 10,000 QPS", value: "10,100 → 10,200", context: "100 failures return as retry traffic", comparison: "the next round begins overloaded" },
+  },
+  {
+    title: "Three Layers Create 64 Calls",
+    body: "Four attempts in browser, frontend, and backend multiply into 4 × 4 × 4 = 64 database calls. Give one adjacent layer retry ownership.",
+    accent_phrase: "64 Calls",
+    visual_tip: "Make the multiplication itself the main object, transforming one user action into a dominant 64-call database result.",
+    visual_plan: plan("Retry policies multiply through the call stack.", "state amplification", "transformation", "64 database calls", "three layers with four attempts each", "the final 64-call state", "visual_dominant"),
+    visual: { type: "transformation", label: "STACKED RETRY POLICIES", before: "1 user action", action: "4 × 4 × 4 attempts", after: "64 database calls" },
+  },
+  {
+    title: "Backoff Without Jitter Repeats The Spike",
+    body: "Fixed delays keep clients synchronized at 100, 200, and 400 ms. Full jitter samples below each cap, spreading retry waves into steadier traffic.",
+    accent_phrase: "Repeats The Spike",
+    visual_tip: "Put the randomized traffic field on the left and the explanation on the right, opposing it with dense synchronized retry marks.",
+    visual_plan: plan("Backoff needs randomness to break synchronized retry waves.", "timing comparison", "comparison", "clustered spikes versus distributed attempts", "100, 200, and 400 millisecond caps", "the full-jitter distribution", "split_right"),
+    visual: { type: "comparison", label: "SAME CAP / DIFFERENT SHAPE", left: "FIXED DELAY\n|||| 100 ms\n|||| 200 ms\n|||| 400 ms", right: "FULL JITTER\n|  | |   |\n  |   | |\nsteady flow", accent: "right" },
+  },
+  {
+    title: "Retries Need A Replay Key",
+    body: "A timeout can hide a committed order. Store the idempotency key and business effect atomically so the next POST replays the result instead of duplicating it.",
+    accent_phrase: "Replay Key",
+    visual_tip: "Let the headline lead into a wide transaction snippet whose highlighted key connects the original request to a safe replay.",
+    visual_plan: plan("Atomic idempotency turns an ambiguous retry into a replay.", "implementation and guarantee", "code", "the transaction boundary", "stored response and business effect", "Idempotency-Key", "headline_top"),
+    visual: { type: "code", label: "COMMIT EFFECT + KEY TOGETHER", lines: ["const key = headers['Idempotency-Key'];", "return db.transaction(async tx => {", "  if (await tx.find(key)) return replay;", "  return tx.commitEffectAndKey(key);", "});"], highlight: "Idempotency-Key" },
+  },
+  {
+    title: "A Budget Stops The Loop",
+    body: "A three-attempt cap can approach 3× traffic. A 10% client retry budget holds general amplification near 1.1× and fails fast when tokens run out.",
+    accent_phrase: "Stops The Loop",
+    visual_tip: "Center a large token cycle above the copy, with the exhausted state interrupting the loop in lime rather than completing another rotation.",
+    visual_plan: plan("A shared retry budget bounds incident-wide amplification.", "feedback loop and constraint", "loop", "the exhausted stop state", "success restores while failure spends", "fail fast", "centered"),
+    visual: { type: "loop", label: "10% RETRY TOKEN BUDGET", items: [{ label: "SUCCESS", detail: "restore token" }, { label: "FAILURE", detail: "spend token" }, { label: "~1.1×", detail: "bounded load" }, { label: "EMPTY", detail: "fail fast", accent: true }] },
+  },
+  {
+    title: "Measure Recovery, Not Retry Volume",
+    body: "Graph (originals + retries) / originals beside useful throughput. Rising amplification plus falling completed work means retries are feeding overload, not recovery.",
+    accent_phrase: "Not Retry Volume",
+    visual_tip: "Use two opposing metric paths in the upper field that converge on a clear retry-storm diagnosis below.",
+    visual_plan: plan("Opposing traffic and throughput trends expose a retry storm.", "cause and operational diagnosis", "cause_effect", "the crossed metric directions", "the amplification formula", "retry storm", "visual_top"),
+    visual: { type: "cause_effect", label: "THE RECOVERY TEST", source: "amplification ↑", turning_point: "useful throughput ↓", outcome: "retries feed overload" },
+  },
+  {
+    title: "Retry Less. Recover Faster.",
+    body: "One owner. Safe operation. Full jitter. Finite budget. Together, they turn blind repetition into bounded recovery.",
+    accent_phrase: "Recover Faster",
+    visual_tip: "Resolve the carousel with four controls converging into one bounded recovery path, followed by a quiet editorial CTA.",
+    visual_plan: plan("Four controls convert retries into bounded recovery.", "resolved implementation path", "flow", "the completed recovery path", "ownership, safety, jitter, and budget", "finite budget", "centered"),
+    visual: { type: "flow", label: "BOUNDED RECOVERY", items: [{ label: "ONE OWNER" }, { label: "IDEMPOTENT" }, { label: "FULL JITTER" }, { label: "FINITE BUDGET", accent: true }] },
+  },
+];
+
 const poolSlides = [
   {
     title: "More Connections Can Be Slower",
@@ -277,6 +359,14 @@ const upgrades = new Map([
       cta_handle: "@Luciano655dev",
     },
   }],
+  ["2026-07-22", {
+    slides: retrySlides,
+    instagram: {
+      layout_style: "balanced",
+      render_revision: "2026-07-22-retry-storms-r2-custom-7d3a91",
+      cta_handle: "@Luciano655dev",
+    },
+  }],
 ]);
 
 const sql = postgres(databaseUrl, { ssl: "require", max: 1, prepare: false });
@@ -295,11 +385,13 @@ try {
       instagram: { ...post.instagram, ...upgrade.instagram, slides: upgrade.slides },
       twitter: {
         ...post.twitter,
-        tweets: upgrade.tweets ?? post.twitter.tweets.map((tweet, index) => {
-          const nextTweet = { ...tweet, image_slide: upgrade.tweetSlides[index] };
-          delete nextTweet.image_tip;
-          return nextTweet;
-        }),
+        tweets: upgrade.tweets ?? (upgrade.tweetSlides
+          ? post.twitter.tweets.map((tweet, index) => {
+              const nextTweet = { ...tweet, image_slide: upgrade.tweetSlides[index] };
+              delete nextTweet.image_tip;
+              return nextTweet;
+            })
+          : post.twitter.tweets),
       },
     };
     delete bundle.id;
@@ -308,7 +400,9 @@ try {
 
     const body = `${JSON.stringify(bundle, null, 2)}\n`;
     await writeFile(`.data/bundle-${post.date}.json`, body);
-    if (post.date === "2026-07-20") await writeFile(".data/bundle.json", body);
+    if (post.date === "2026-07-20" || post.date === "2026-07-22") {
+      await writeFile(".data/bundle.json", body);
+    }
     preparedRows.push({ ...post, instagram: bundle.instagram, twitter: bundle.twitter });
 
     if (prepareOnly) {

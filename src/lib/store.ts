@@ -10,7 +10,7 @@ export interface Store {
   listSummaries(): Promise<PostSummary[]>;
   getPost(id: string): Promise<PostRow | null>;
   upsertPost(bundle: ContentBundle): Promise<void>;
-  listTopics(): Promise<{ date: string; topic: string }[]>;
+  listTopics(): Promise<{ date: string; topic: string; social_topic: string }[]>;
   updateStatus(id: string, platform: Platform, posted: boolean): Promise<PostStatus | null>;
   deletePost(id: string): Promise<boolean>;
 }
@@ -24,6 +24,10 @@ function normalizeRow(row: PostRow): PostRow {
   return {
     ...row,
     id: row.id || localPostId(row),
+    social_topic: row.social_topic || row.topic,
+    social_topic_rationale: row.social_topic_rationale || row.topic_rationale,
+    social_research_sources:
+      row.social_research_sources?.length > 0 ? row.social_research_sources : row.research_sources,
     status: { ...EMPTY_STATUS, ...row.status },
   };
 }
@@ -46,11 +50,15 @@ class SupabaseStore implements Store {
   async listSummaries(): Promise<PostSummary[]> {
     const { data, error } = await this.client
       .from("posts")
-      .select("id, date, topic, status, created_at")
+      .select("id, date, topic, social_topic, status, created_at")
       .order("date", { ascending: false })
       .order("created_at", { ascending: false });
     if (error) throw new Error(error.message);
-    return (data ?? []).map((r) => ({ ...r, status: { ...EMPTY_STATUS, ...r.status } }));
+    return (data ?? []).map((r) => ({
+      ...r,
+      social_topic: r.social_topic || r.topic,
+      status: { ...EMPTY_STATUS, ...r.status },
+    }));
   }
 
   async getPost(id: string): Promise<PostRow | null> {
@@ -75,13 +83,16 @@ class SupabaseStore implements Store {
     if (error) throw new Error(error.message);
   }
 
-  async listTopics(): Promise<{ date: string; topic: string }[]> {
+  async listTopics(): Promise<{ date: string; topic: string; social_topic: string }[]> {
     const { data, error } = await this.client
       .from("posts")
-      .select("date, topic")
+      .select("date, topic, social_topic")
       .order("date", { ascending: false });
     if (error) throw new Error(error.message);
-    return data ?? [];
+    return (data ?? []).map((row) => ({
+      ...row,
+      social_topic: row.social_topic || row.topic,
+    }));
   }
 
   async updateStatus(id: string, platform: Platform, posted: boolean): Promise<PostStatus | null> {
@@ -131,7 +142,14 @@ class BlobStore implements Store {
     const rows = await this.readAll();
     return rows
       .sort(newestFirst)
-      .map(({ id, date, topic, status, created_at }) => ({ id, date, topic, status, created_at }));
+      .map(({ id, date, topic, social_topic, status, created_at }) => ({
+        id,
+        date,
+        topic,
+        social_topic,
+        status,
+        created_at,
+      }));
   }
 
   async getPost(id: string): Promise<PostRow | null> {
@@ -153,11 +171,11 @@ class BlobStore implements Store {
     await this.writeAll(next);
   }
 
-  async listTopics(): Promise<{ date: string; topic: string }[]> {
+  async listTopics(): Promise<{ date: string; topic: string; social_topic: string }[]> {
     const rows = await this.readAll();
     return rows
       .sort((a, b) => b.date.localeCompare(a.date))
-      .map(({ date, topic }) => ({ date, topic }));
+      .map(({ date, topic, social_topic }) => ({ date, topic, social_topic }));
   }
 
   async updateStatus(id: string, platform: Platform, posted: boolean): Promise<PostStatus | null> {
@@ -194,7 +212,14 @@ class PostgresStore implements Store {
     const rows = await this.readAll();
     return rows
       .sort(newestFirst)
-      .map(({ id, date, topic, status, created_at }) => ({ id, date, topic, status, created_at }));
+      .map(({ id, date, topic, social_topic, status, created_at }) => ({
+        id,
+        date,
+        topic,
+        social_topic,
+        status,
+        created_at,
+      }));
   }
 
   async getPost(id: string): Promise<PostRow | null> {
@@ -216,11 +241,11 @@ class PostgresStore implements Store {
     await this.writeAll(next);
   }
 
-  async listTopics(): Promise<{ date: string; topic: string }[]> {
+  async listTopics(): Promise<{ date: string; topic: string; social_topic: string }[]> {
     const rows = await this.readAll();
     return rows
       .sort((a, b) => b.date.localeCompare(a.date))
-      .map(({ date, topic }) => ({ date, topic }));
+      .map(({ date, topic, social_topic }) => ({ date, topic, social_topic }));
   }
 
   async updateStatus(id: string, platform: Platform, posted: boolean): Promise<PostStatus | null> {
@@ -265,7 +290,14 @@ class FileStore implements Store {
     const rows = await this.readAll();
     return rows
       .sort(newestFirst)
-      .map(({ id, date, topic, status, created_at }) => ({ id, date, topic, status, created_at }));
+      .map(({ id, date, topic, social_topic, status, created_at }) => ({
+        id,
+        date,
+        topic,
+        social_topic,
+        status,
+        created_at,
+      }));
   }
 
   async getPost(id: string): Promise<PostRow | null> {
@@ -287,11 +319,11 @@ class FileStore implements Store {
     await this.writeAll(next);
   }
 
-  async listTopics(): Promise<{ date: string; topic: string }[]> {
+  async listTopics(): Promise<{ date: string; topic: string; social_topic: string }[]> {
     const rows = await this.readAll();
     return rows
       .sort((a, b) => b.date.localeCompare(a.date))
-      .map(({ date, topic }) => ({ date, topic }));
+      .map(({ date, topic, social_topic }) => ({ date, topic, social_topic }));
   }
 
   async updateStatus(id: string, platform: Platform, posted: boolean): Promise<PostStatus | null> {

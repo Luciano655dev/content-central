@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
   getAutomationState,
+  isRunScope,
   isValidTime,
   isValidTimezone,
   queueManualRun,
   updateAutomationSettings,
 } from "@/lib/automation";
+import { getStore } from "@/lib/store";
 
 export const dynamic = "force-dynamic";
 
@@ -20,9 +22,26 @@ export async function GET() {
   }
 }
 
-export async function POST() {
+export async function POST(request: NextRequest) {
+  const body = (await request.json().catch(() => ({}))) as {
+    scope?: unknown;
+    postId?: unknown;
+  };
+  const scope = body.scope ?? "all";
+  if (!isRunScope(scope)) {
+    return NextResponse.json({ error: "Invalid rerun scope" }, { status: 422 });
+  }
+  if (scope !== "all" && (typeof body.postId !== "string" || !body.postId.trim())) {
+    return NextResponse.json({ error: "A post ID is required for a scoped rerun" }, { status: 422 });
+  }
   try {
-    const state = await queueManualRun();
+    if (scope !== "all" && !(await getStore().getPost(body.postId as string))) {
+      return NextResponse.json({ error: "Post not found" }, { status: 404 });
+    }
+    const state = await queueManualRun({
+      scope,
+      ...(scope !== "all" ? { postId: body.postId as string } : {}),
+    });
     if (!state) {
       return NextResponse.json({ error: "A content run is already queued or running" }, { status: 409 });
     }

@@ -61,4 +61,4 @@ Exactly 4, all lowercase, no spaces. First tag = biggest relevant community (`ja
 
 ## Voice
 
-Peer-to-peer, generous, a little playful. You're the colleague who explains things well, not a professor. First person is good. Admitting past mistakes ("I shipped this bug twice") builds trust and gets comments.
+Peer-to-peer, generous, a little playful. Use precise technical language and name the real APIs, mechanisms, and failure modes, but explain each one with common words. Never replace a clear sentence with complicated vocabulary just to sound advanced. You're the colleague who explains things well, not a professor. First person is good. Admitting past mistakes ("I shipped this bug twice") builds trust and gets comments.

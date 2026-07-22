@@ -1,38 +1,51 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Check } from "lucide-react";
 import type { Platform } from "@/lib/types";
 
 export default function PostedToggle({
   id,
   platform,
-  initialPosted,
+  posted,
+  onPostedChange,
 }: {
   id: string;
   platform: Platform;
-  initialPosted: boolean;
+  posted: boolean;
+  onPostedChange: (posted: boolean) => void;
 }) {
-  const [posted, setPosted] = useState(initialPosted);
-  const [pending, startTransition] = useTransition();
+  const router = useRouter();
+  const [pending, setPending] = useState(false);
 
-  function toggle() {
+  async function toggle() {
     const next = !posted;
-    setPosted(next);
-    startTransition(async () => {
+    onPostedChange(next);
+    setPending(true);
+    try {
       const res = await fetch(`/api/posts/${encodeURIComponent(id)}/status`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ platform, posted: next }),
       });
-      if (!res.ok) setPosted(!next); // revert on failure
-    });
+      if (!res.ok) {
+        onPostedChange(!next);
+        return;
+      }
+      router.refresh();
+    } catch {
+      onPostedChange(!next);
+    } finally {
+      setPending(false);
+    }
   }
 
   return (
     <button
       onClick={toggle}
       disabled={pending}
+      aria-pressed={posted}
       className={`inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm transition-colors ${
         posted
           ? "border-success/40 bg-success/10 text-success"

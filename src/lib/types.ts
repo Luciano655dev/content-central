@@ -29,6 +29,14 @@ export type InstagramSlide = {
   title: string;
   body: string;
   visual_tip: string;
+  /** Public AI-generated visual layer. Exact slide text is rendered separately on top. */
+  generated_visual_url?: string;
+  /** Key for an optimized visual layer stored separately from the post bundle. */
+  generated_visual_key?: string;
+  /** Local workspace path used by the trusted runner before it uploads the asset to Blob. */
+  generated_visual_path?: string;
+  /** Short description of the generated visual for asset review and debugging. */
+  generated_visual_alt?: string;
   /** Exact word or short phrase from the title rendered in lime serif italic. */
   accent_phrase?: string;
   /** Structured visual that the deterministic poster renderer can draw accurately. */
@@ -40,6 +48,7 @@ export type InstagramSlide = {
 export type InstagramComposition =
   | "headline_top"
   | "visual_top"
+  | "text_bottom"
   | "split_left"
   | "split_right"
   | "centered"
@@ -93,14 +102,21 @@ export type InstagramContent = {
 
 export type Platform = "devto" | "tabnews" | "twitter" | "instagram";
 
+export type ContentSession = "articles" | "social";
+
 export type PostStatus = Record<Platform, boolean>;
 
 /** The JSON contract the daily agent POSTs to /api/ingest. */
 export type ContentBundle = {
   date: string; // YYYY-MM-DD
+  /** Technical long-form topic shared by Dev.to and TabNews. */
   topic: string;
   topic_rationale: string;
   research_sources: ResearchSource[];
+  /** Independent quick, useful topic shared by Twitter and Instagram. */
+  social_topic: string;
+  social_topic_rationale: string;
+  social_research_sources: ResearchSource[];
   devto: DevtoContent;
   tabnews: TabnewsContent;
   twitter: TwitterContent;
@@ -118,6 +134,7 @@ export type PostSummary = {
   id: string;
   date: string;
   topic: string;
+  social_topic: string;
   status: PostStatus;
   created_at?: string;
 };
@@ -130,6 +147,18 @@ export const EMPTY_STATUS: PostStatus = {
 };
 
 export const PLATFORMS: Platform[] = ["devto", "tabnews", "twitter", "instagram"];
+
+export const CONTENT_SESSIONS: ContentSession[] = ["articles", "social"];
+
+export const SESSION_PLATFORMS: Record<ContentSession, Platform[]> = {
+  articles: ["devto", "tabnews"],
+  social: ["twitter", "instagram"],
+};
+
+export const SESSION_LABELS: Record<ContentSession, string> = {
+  articles: "Articles",
+  social: "Social",
+};
 
 export const PLATFORM_LABELS: Record<Platform, string> = {
   devto: "Dev.to",

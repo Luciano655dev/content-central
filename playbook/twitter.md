@@ -1,6 +1,14 @@
 # Twitter/X Thread Guide (English)
 
-The hook tweet determines ~90% of thread performance. Top creators draft 10+ hooks and pick one. Tone here is DIFFERENT from the articles: **aggressive, imponent, confident**. You state things; you don't suggest them. No hedging, no "I think", no "maybe". You are the dev who has seen it all and is doing the reader a favor.
+Twitter comes from the independent social research session, never from compressing the Dev.to/TabNews article. The hook is forceful; everything after it sounds like a smart friend sending something genuinely useful. Keep it extremely informal, direct, easy to scan, and free of professional-article phrasing.
+
+## Punctuation and voice
+
+- **Never end a sentence with `.`** — use a line break, comma, colon, question mark, exclamation mark, arrow, or no punctuation
+- Contractions and everyday phrasing are good: “you’re,” “don’t,” “here’s,” “this is the part people miss”
+- No formal transitions such as “furthermore,” “therefore,” “in conclusion,” or “it is important to note”
+- No hedging with “I think,” “maybe,” or “perhaps”
+- Read every tweet aloud: it should sound like a real message, not narration from an article
 
 ## Hook tweet (tweet 1)
 
@@ -23,10 +31,10 @@ The hook tweet determines ~90% of thread performance. Top creators draft 10+ hoo
 - Every tweet's FIRST line is a sub-hook — assume it's read in isolation
 - Use line breaks and arrows (→) for rhythm; walls of text die
 - Concrete > abstract in every single tweet: numbers, code, named tools
-- Give the idea enough room to become useful: body tweets should normally land around **150–260 characters**. Treat **110–280** as a flexible editorial band when code, a sharp hook, or a compact example needs a different shape
+- Keep the idea complete but quick: body tweets should normally land around **90–220 characters**. A shorter tweet is good when it delivers the action or fact cleanly
 - A body tweet must explain at least one of: **how the mechanism works, why it fails, what the evidence shows, or what the reader should do**. Naming a concept and calling it important is not a tweet
 - Prefer 2–4 short lines or paragraphs. Use the available characters for one precise explanation, not several shallow claims
-- Run the standalone test: if the tweet is separated from the thread, it should still teach a concrete fact, condition, API choice, number, or decision rule
+- Run the standalone test: if the tweet is separated from the thread, it should still give one useful fact, action, condition, shortcut, or decision rule
 - ≤ 280 chars per tweet, always
 - 5–8 tweets total. Every tweet must earn the next swipe
 
@@ -41,4 +49,4 @@ Twitter never gets separately generated images. Reuse only a genuinely matching 
 
 ## Closing tweet
 
-Three jobs, one line each: (1) the one-sentence takeaway, restated with force; (2) identity-signal statement the reader wants to retweet to look smart; (3) CTA — "Follow @Luciano655dev for daily deep dives like this" (growth) or a question (engagement). Alternate CTAs across days.
+Keep the closing casual. Restate the useful takeaway, then ask a real question or use a light follow/save CTA. Never say “daily deep dives” for a quick social post, and never add a final period.

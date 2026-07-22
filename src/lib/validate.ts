@@ -21,6 +21,7 @@ export function validateBundle(input: unknown): Result {
     return { ok: false, error: "date must be YYYY-MM-DD" };
   }
   if (!isNonEmptyString(b.topic)) return { ok: false, error: "topic is required" };
+  const socialTopic = isNonEmptyString(b.social_topic) ? b.social_topic : b.topic;
 
   const devto = b.devto as Record<string, unknown> | undefined;
   if (!devto || !isNonEmptyString(devto.title) || !isNonEmptyString(devto.body_markdown)) {
@@ -39,10 +40,10 @@ export function validateBundle(input: unknown): Result {
   if (!tweets.every((tweet) => String(tweet.text).length <= 280)) {
     return { ok: false, error: "every twitter tweet must be at most 280 characters" };
   }
-  if (!tweets.every((tweet) => String(tweet.text).trim().length >= 110)) {
+  if (!tweets.every((tweet) => String(tweet.text).trim().length >= 50)) {
     return {
       ok: false,
-      error: "every twitter tweet must contain at least 110 characters of useful standalone context",
+      error: "every twitter tweet must contain at least 50 characters of useful standalone context",
     };
   }
 
@@ -59,10 +60,10 @@ export function validateBundle(input: unknown): Result {
     return { ok: false, error: "instagram.caption is required" };
   }
   const middleSlides = slides.slice(1, -1);
-  if (!middleSlides.every((slide) => wordCount(String(slide.body)) >= 18)) {
+  if (!middleSlides.every((slide) => wordCount(String(slide.body)) >= 8)) {
     return {
       ok: false,
-      error: "every middle Instagram slide body must contain at least 18 useful words",
+      error: "every middle Instagram slide body must contain at least 8 useful words",
     };
   }
   if (!middleSlides.every((slide) => wordCount(String(slide.body)) <= 45)) {
@@ -97,6 +98,9 @@ export function validateBundle(input: unknown): Result {
   }
 
   const sources = Array.isArray(b.research_sources) ? b.research_sources : [];
+  const socialSources = Array.isArray(b.social_research_sources)
+    ? b.social_research_sources
+    : sources;
 
   return {
     ok: true,
@@ -105,6 +109,15 @@ export function validateBundle(input: unknown): Result {
       topic: b.topic.trim(),
       topic_rationale: isNonEmptyString(b.topic_rationale) ? b.topic_rationale : "",
       research_sources: sources
+        .filter((s) => isNonEmptyString(s?.title) && isNonEmptyString(s?.url))
+        .map((s) => ({ title: s.title, url: s.url })),
+      social_topic: socialTopic.trim(),
+      social_topic_rationale: isNonEmptyString(b.social_topic_rationale)
+        ? b.social_topic_rationale
+        : isNonEmptyString(b.topic_rationale)
+          ? b.topic_rationale
+          : "",
+      social_research_sources: socialSources
         .filter((s) => isNonEmptyString(s?.title) && isNonEmptyString(s?.url))
         .map((s) => ({ title: s.title, url: s.url })),
       devto: {
@@ -138,6 +151,18 @@ export function validateBundle(input: unknown): Result {
           title: s.title as string,
           body: s.body as string,
           visual_tip: isNonEmptyString(s.visual_tip) ? (s.visual_tip as string) : "",
+          ...(isNonEmptyString(s.generated_visual_url)
+            ? { generated_visual_url: s.generated_visual_url as string }
+            : {}),
+          ...(isNonEmptyString(s.generated_visual_key)
+            ? { generated_visual_key: s.generated_visual_key as string }
+            : {}),
+          ...(isNonEmptyString(s.generated_visual_path)
+            ? { generated_visual_path: s.generated_visual_path as string }
+            : {}),
+          ...(isNonEmptyString(s.generated_visual_alt)
+            ? { generated_visual_alt: s.generated_visual_alt as string }
+            : {}),
           ...(isNonEmptyString(s.accent_phrase)
             ? { accent_phrase: s.accent_phrase as string }
             : {}),
@@ -219,6 +244,7 @@ function isDiagramItemArray(value: unknown, minimum: number): boolean {
 const COMPOSITIONS = new Set([
   "headline_top",
   "visual_top",
+  "text_bottom",
   "split_left",
   "split_right",
   "centered",

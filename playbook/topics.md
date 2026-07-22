@@ -1,4 +1,6 @@
-# Topic Selection — the quality bar
+# Article Topic Selection — the deep technical quality bar
+
+This file applies only to the Dev.to/TabNews research session. Use `social-topics.md` for the separate Twitter/Instagram topic.
 
 The entire system lives or dies on this choice. A perfectly written post about a boring topic is worthless.
 

@@ -3,10 +3,13 @@
 import { useEffect, useState } from "react";
 import { Clock3, LoaderCircle, Play } from "lucide-react";
 import type { AutomationState } from "@/lib/automation";
+import { AutomationRunProgress } from "./AutomationRunProgress";
 
 function statusText(state: AutomationState): string {
-  if (state.status === "queued") return "Queued — the local Codex runner will pick it up within five minutes";
-  if (state.status === "running") return "Codex is researching and writing now";
+  if (state.status === "queued") {
+    return state.lastMessage ?? "Queued — the local Codex runner will pick it up within five minutes";
+  }
+  if (state.status === "running") return state.lastMessage ?? "Codex is researching and writing now";
   if (state.status === "failed") return `Last run failed${state.lastMessage ? `: ${state.lastMessage}` : ""}`;
   if (state.status === "succeeded") return "Last run finished successfully";
   return state.lastMessage ?? "Ready";
@@ -20,12 +23,22 @@ export default function AutomationControls({ initialState }: { initialState: Aut
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (state.status !== "queued" && state.status !== "running") return;
-    const timer = window.setInterval(async () => {
+    let cancelled = false;
+    async function refreshState() {
       const response = await fetch("/api/automation", { cache: "no-store" });
-      if (response.ok) setState((await response.json()) as AutomationState);
-    }, 5000);
-    return () => window.clearInterval(timer);
+      if (response.ok && !cancelled) setState((await response.json()) as AutomationState);
+    }
+    void refreshState();
+    if (state.status !== "queued" && state.status !== "running") {
+      return () => {
+        cancelled = true;
+      };
+    }
+    const timer = window.setInterval(refreshState, 2500);
+    return () => {
+      cancelled = true;
+      window.clearInterval(timer);
+    };
   }, [state.status]);
 
   async function runNow() {
@@ -82,7 +95,7 @@ export default function AutomationControls({ initialState }: { initialState: Aut
           ) : (
             <Play className="h-4 w-4" />
           )}
-          Run new one
+          Run both sessions
         </button>
       </div>
 
@@ -118,8 +131,14 @@ export default function AutomationControls({ initialState }: { initialState: Aut
       </div>
       {error && <p className="mt-3 text-sm text-warning">{error}</p>}
       <p className="mt-3 text-xs leading-relaxed text-muted">
-        Uses the Codex CLI signed in with ChatGPT on this Mac. No pay-as-you-go model API.
+        Each run researches articles and social separately using the Codex CLI signed in with ChatGPT on this Mac.
+        No pay-as-you-go model API.
       </p>
+      {state.status !== "idle" && (
+        <div className="mt-4 max-w-xl">
+          <AutomationRunProgress state={state} />
+        </div>
+      )}
     </section>
   );
 }

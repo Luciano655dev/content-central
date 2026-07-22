@@ -35,5 +35,6 @@ A régua real de completude: no final, quem leu consegue explicar o mecanismo, a
 - **Teste da especificidade**: se uma frase serviria igual num artigo sobre outro tema, delete
 - Markdown completo: `##` para seções, blocos de código com linguagem, tabelas quando ajudarem
 - Parágrafos curtos, ritmo variado. PT-BR natural: "você", zero "portanto" empilhado
+- Linguagem um pouco mais técnica que a sessão social: nomeie APIs, mecanismos e falhas reais, mas explique tudo com palavras simples e sem vocabulário rebuscado
 - Exemplos localizados quando fizer sentido (Pix como exemplo de idempotência > Stripe, real > dólar, empresa BR > empresa americana)
 - Fechar com pergunta genuína para a comunidade — comentário é o que segura o post no "Relevantes"
