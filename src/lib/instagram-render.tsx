@@ -11,7 +11,7 @@ import { postgresUrl, readPostgresState } from "./postgres-state";
 
 const WIDTH = 1080;
 const HEIGHT = 1350;
-const SAFE = 84;
+const SAFE = 64;
 const COLORS = {
   background: "#0A0A0A",
   panel: "#111111",
@@ -93,7 +93,7 @@ function MonoLabel({ children }: { children: string }) {
     <span
       style={{
         fontFamily: "IBM Plex Mono",
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: 500,
         letterSpacing: "0.08em",
         color: COLORS.muted,
@@ -105,18 +105,34 @@ function MonoLabel({ children }: { children: string }) {
   );
 }
 
-function Headline({ slide, compact = false }: { slide: InstagramSlide; compact?: boolean }) {
+function Headline({
+  slide,
+  compact = false,
+  cover = false,
+}: {
+  slide: InstagramSlide;
+  compact?: boolean;
+  cover?: boolean;
+}) {
   const [before, accent, after] = splitAccent(slide.title, slide.accent_phrase);
   const visibleBefore = before.replace(/\s$/, "\u00A0");
   const visibleAfter = after.replace(/^\s/, "\u00A0");
-  const base = slide.title.length <= 24 ? 124 : slide.title.length <= 40 ? 108 : 92;
-  const fontSize = compact
+  const base = slide.title.length <= 24 ? 134 : slide.title.length <= 40 ? 116 : 100;
+  const fontSize = cover
     ? slide.title.length > 44
-      ? 68
+      ? 108
       : slide.title.length > 32
-        ? 78
-        : Math.min(base, 92)
-    : base;
+        ? 124
+        : slide.title.length > 24
+          ? 140
+          : 164
+    : compact
+      ? slide.title.length > 44
+        ? 76
+        : slide.title.length > 32
+          ? 88
+          : Math.min(base, 108)
+      : base;
   return (
     <div
       style={{
@@ -126,7 +142,7 @@ function Headline({ slide, compact = false }: { slide: InstagramSlide; compact?:
         fontFamily: "Inter",
         fontSize,
         fontWeight: 800,
-        lineHeight: 0.94,
+        lineHeight: cover ? 0.88 : 0.92,
         letterSpacing: "-0.055em",
         color: COLORS.text,
       }}
@@ -153,11 +169,11 @@ function SupportingText({ slide, compact = false }: { slide: InstagramSlide; com
     <div
       style={{
         display: "flex",
-        maxWidth: compact ? 430 : 850,
-        marginTop: compact ? 28 : 30,
+        maxWidth: compact ? 500 : 900,
+        marginTop: compact ? 22 : 26,
         whiteSpace: "pre-wrap",
         fontFamily: "Inter",
-        fontSize: compact ? 29 : slide.body.length > 150 ? 29 : 34,
+        fontSize: compact ? 31 : slide.body.length > 150 ? 32 : 37,
         fontWeight: 400,
         lineHeight: 1.34,
         letterSpacing: "-0.018em",
@@ -169,7 +185,7 @@ function SupportingText({ slide, compact = false }: { slide: InstagramSlide; com
   );
 }
 
-function ItemText({ item, size = 22 }: { item: InstagramDiagramItem; size?: number }) {
+function ItemText({ item, size = 24 }: { item: InstagramDiagramItem; size?: number }) {
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       <span
@@ -188,7 +204,7 @@ function ItemText({ item, size = 22 }: { item: InstagramDiagramItem; size?: numb
           style={{
             marginTop: 8,
             fontFamily: "Inter",
-            fontSize: Math.max(17, size - 3),
+            fontSize: Math.max(19, size - 3),
             lineHeight: 1.25,
             color: COLORS.muted,
           }}
@@ -218,7 +234,7 @@ function CodeVisual({ visual }: { visual: Extract<InstagramSlideVisual, { type: 
           display: "flex",
           flexDirection: "column",
           width: "100%",
-          padding: "34px 36px",
+          padding: "38px 40px",
           borderLeft: `3px solid ${COLORS.accent}`,
           background: COLORS.panel,
         }}
@@ -231,7 +247,7 @@ function CodeVisual({ visual }: { visual: Extract<InstagramSlideVisual, { type: 
               style={{
                 marginTop: index ? 13 : 0,
                 fontFamily: "IBM Plex Mono",
-                fontSize: line.length > 40 ? 21 : 25,
+                fontSize: line.length > 40 ? 23 : 27,
                 fontWeight: highlighted ? 500 : 400,
                 lineHeight: 1.38,
                 color: highlighted ? COLORS.accent : COLORS.text,
@@ -250,7 +266,7 @@ function TimelineVisual({ visual }: { visual: Extract<InstagramSlideVisual, { ty
   return (
     <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
       <VisualLabel visual={visual} />
-      <div style={{ display: "flex", position: "relative", width: "100%", minHeight: 225, paddingTop: 24 }}>
+      <div style={{ display: "flex", position: "relative", width: "100%", minHeight: 260, paddingTop: 24 }}>
         <div
           style={{
             position: "absolute",
@@ -283,7 +299,7 @@ function TimelineVisual({ visual }: { visual: Extract<InstagramSlideVisual, { ty
                 background: item.accent ? COLORS.accent : COLORS.background,
               }}
             />
-            <ItemText item={item} size={20} />
+            <ItemText item={item} size={22} />
           </div>
         ))}
       </div>
@@ -296,7 +312,7 @@ function ComparisonVisual({ visual }: { visual: Extract<InstagramSlideVisual, { 
   return (
     <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
       <VisualLabel visual={visual} />
-      <div style={{ display: "flex", width: "100%", minHeight: 250 }}>
+      <div style={{ display: "flex", width: "100%", minHeight: 300 }}>
         {(["left", "right"] as const).map((side, index) => (
           <div
             key={side}
@@ -305,12 +321,12 @@ function ComparisonVisual({ visual }: { visual: Extract<InstagramSlideVisual, { 
               flex: 1,
               alignItems: "flex-end",
               marginLeft: index ? 30 : 0,
-              padding: "34px 30px",
+              padding: "40px 34px",
               whiteSpace: "pre-wrap",
               borderLeft: `2px solid ${accent === side ? COLORS.accent : COLORS.border}`,
               background: accent === side ? COLORS.panel2 : "transparent",
               fontFamily: "IBM Plex Mono",
-              fontSize: 26,
+              fontSize: 29,
               fontWeight: 500,
               lineHeight: 1.35,
               color: accent === side ? COLORS.accent : COLORS.secondary,
@@ -335,14 +351,14 @@ function FlowVisual({ visual }: { visual: Extract<InstagramSlideVisual, { type: 
               style={{
                 display: "flex",
                 flex: 1,
-                minHeight: 150,
+                minHeight: 190,
                 alignItems: "center",
-                padding: "25px 22px",
+                padding: "30px 24px",
                 border: `1px solid ${item.accent ? COLORS.accent : COLORS.border}`,
                 background: item.accent ? COLORS.panel2 : COLORS.panel,
               }}
             >
-              <ItemText item={item} size={20} />
+              <ItemText item={item} size={22} />
             </div>
             {index < visual.items.length - 1 && (
               <span style={{ padding: "0 9px", fontFamily: "IBM Plex Mono", fontSize: 28, color: COLORS.line }}>→</span>
@@ -358,7 +374,7 @@ function CauseEffectVisual({ visual }: { visual: Extract<InstagramSlideVisual, {
   return (
     <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
       <VisualLabel visual={visual} />
-      <div style={{ display: "flex", alignItems: "center", width: "100%", minHeight: 250 }}>
+      <div style={{ display: "flex", alignItems: "center", width: "100%", minHeight: 290 }}>
         <div style={{ display: "flex", flex: 1, padding: 26, borderTop: `2px solid ${COLORS.line}` }}>
           <ItemText item={{ label: visual.source, detail: "SOURCE" }} size={22} />
         </div>
@@ -366,7 +382,7 @@ function CauseEffectVisual({ visual }: { visual: Extract<InstagramSlideVisual, {
           style={{
             display: "flex",
             width: 230,
-            minHeight: 190,
+            minHeight: 220,
             alignItems: "center",
             justifyContent: "center",
             padding: 24,
@@ -397,7 +413,7 @@ function NumericVisual({ visual }: { visual: Extract<InstagramSlideVisual, { typ
           style={{
             flexShrink: 0,
             fontFamily: "IBM Plex Mono",
-            fontSize: visual.value.length > 12 ? 64 : visual.value.length > 7 ? 96 : 154,
+          fontSize: visual.value.length > 12 ? 72 : visual.value.length > 7 ? 108 : 172,
             fontWeight: 500,
             lineHeight: 0.9,
             letterSpacing: "-0.07em",
@@ -419,7 +435,7 @@ function NumericVisual({ visual }: { visual: Extract<InstagramSlideVisual, { typ
           <span
             style={{
               fontFamily: "Inter",
-              fontSize: visual.value.length > 12 ? 24 : 28,
+              fontSize: visual.value.length > 12 ? 27 : 31,
               fontWeight: 500,
               lineHeight: 1.25,
               color: COLORS.text,
@@ -451,17 +467,17 @@ function LayeredVisual({ visual }: { visual: Extract<InstagramSlideVisual, { typ
           style={{
             display: "flex",
             width: `${100 - index * 6}%`,
-            minHeight: 70,
+            minHeight: 84,
             marginTop: index ? 10 : 0,
             marginLeft: `${index * 3}%`,
             alignItems: "center",
             justifyContent: "space-between",
-            padding: "16px 24px",
+            padding: "20px 26px",
             border: `1px solid ${layer.accent ? COLORS.accent : COLORS.border}`,
             background: layer.accent ? COLORS.panel2 : index % 2 ? COLORS.panel : "transparent",
           }}
         >
-          <ItemText item={layer} size={20} />
+          <ItemText item={layer} size={22} />
           <span style={{ fontFamily: "IBM Plex Mono", fontSize: 16, color: COLORS.muted }}>L{index + 1}</span>
         </div>
       ))}
@@ -478,12 +494,12 @@ function TransformationVisual({ visual }: { visual: Extract<InstagramSlideVisual
           style={{
             display: "flex",
             flex: 1,
-            minHeight: 190,
+            minHeight: 225,
             alignItems: "center",
             padding: 28,
             border: `1px solid ${COLORS.border}`,
             fontFamily: "IBM Plex Mono",
-            fontSize: 23,
+            fontSize: 26,
             color: COLORS.secondary,
           }}
         >
@@ -510,13 +526,13 @@ function TransformationVisual({ visual }: { visual: Extract<InstagramSlideVisual
           style={{
             display: "flex",
             flex: 1,
-            minHeight: 190,
+            minHeight: 225,
             alignItems: "center",
             padding: 28,
             border: `2px solid ${COLORS.accent}`,
             background: COLORS.panel2,
             fontFamily: "IBM Plex Mono",
-            fontSize: 23,
+            fontSize: 26,
             color: COLORS.accent,
           }}
         >
@@ -537,8 +553,8 @@ function LoopVisual({ visual }: { visual: Extract<InstagramSlideVisual, { type: 
   return (
     <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
       <VisualLabel visual={visual} />
-      <div style={{ display: "flex", position: "relative", width: "100%", height: 360 }}>
-        <svg width="100%" height="360" viewBox="0 0 900 360">
+      <div style={{ display: "flex", position: "relative", width: "100%", height: 400 }}>
+        <svg width="100%" height="400" viewBox="0 0 900 360">
           <path d="M 165 180 C 185 30, 715 30, 735 180 C 715 330, 185 330, 165 180" fill="none" stroke={COLORS.line} strokeWidth="3" />
           <path d="M 450 32 C 590 32, 700 78, 730 150" fill="none" stroke={COLORS.accent} strokeWidth="4" />
           <path d="M 718 133 L 731 151 L 739 129" fill="none" stroke={COLORS.accent} strokeWidth="4" />
@@ -569,7 +585,7 @@ function SpatialVisual({ visual }: { visual: Extract<InstagramSlideVisual, { typ
   return (
     <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
       <VisualLabel visual={visual} />
-      <div style={{ display: "flex", alignItems: "stretch", width: "100%", minHeight: 280 }}>
+      <div style={{ display: "flex", alignItems: "stretch", width: "100%", minHeight: 330 }}>
         {visual.regions.map((region, index) => (
           <div
             key={`${region.label}-${index}`}
@@ -584,7 +600,7 @@ function SpatialVisual({ visual }: { visual: Extract<InstagramSlideVisual, { typ
               background: region.accent ? COLORS.panel2 : "transparent",
             }}
           >
-            <ItemText item={region} size={21} />
+            <ItemText item={region} size={23} />
           </div>
         ))}
       </div>
@@ -602,8 +618,8 @@ function IllustrationVisual({ visual }: { visual: Extract<InstagramSlideVisual, 
   return (
     <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
       <VisualLabel visual={visual} />
-      <div style={{ display: "flex", position: "relative", width: "100%", height: 340 }}>
-        <svg width="100%" height="340" viewBox="0 0 900 340">
+      <div style={{ display: "flex", position: "relative", width: "100%", height: 400 }}>
+        <svg width="100%" height="400" viewBox="0 0 900 340">
           {visual.links.map((link, index) => {
             const from = nodeMap.get(link.from);
             const to = nodeMap.get(link.to);
@@ -629,17 +645,17 @@ function IllustrationVisual({ visual }: { visual: Extract<InstagramSlideVisual, 
               position: "absolute",
               left: `${node.x}%`,
               top: `${node.y}%`,
-              width: 160,
-              minHeight: 72,
+              width: 180,
+              minHeight: 84,
               transform: "translate(-50%, -50%)",
               alignItems: "center",
               justifyContent: "center",
-              padding: 15,
+              padding: 17,
               border: `2px solid ${node.accent ? COLORS.accent : COLORS.line}`,
               borderRadius: 999,
               background: COLORS.background,
               fontFamily: "IBM Plex Mono",
-              fontSize: 17,
+              fontSize: 18,
               fontWeight: 500,
               textAlign: "center",
               color: node.accent ? COLORS.accent : COLORS.text,
@@ -691,12 +707,12 @@ function CoverLayout({ slide, balanced }: { slide: InstagramSlide; balanced: boo
       <div
         style={{
           display: "flex",
-          width: "58%",
+          width: "64%",
           flexDirection: "column",
           justifyContent: "center",
         }}
       >
-        <Headline slide={slide} compact />
+        <Headline slide={slide} cover />
         <SupportingText slide={slide} compact />
       </div>
     );
@@ -704,12 +720,12 @@ function CoverLayout({ slide, balanced }: { slide: InstagramSlide; balanced: boo
       <div
         style={{
           display: "flex",
-          width: "36%",
-          maxHeight: 560,
+          width: "32%",
+          maxHeight: 620,
           alignItems: "center",
           alignSelf: "center",
           overflow: "hidden",
-          opacity: 0.9,
+          opacity: 1,
         }}
       >
         <Visual slide={slide} />
@@ -729,17 +745,17 @@ function CoverLayout({ slide, balanced }: { slide: InstagramSlide; balanced: boo
         <div
           style={{
             display: "flex",
-            width: "74%",
-            maxHeight: 285,
-            marginBottom: 58,
+            width: "92%",
+            maxHeight: 360,
+            marginBottom: 36,
             alignSelf: "flex-end",
             overflow: "hidden",
-            opacity: 0.88,
+            opacity: 1,
           }}
         >
           <Visual slide={slide} />
         </div>
-        <Headline slide={slide} />
+        <Headline slide={slide} cover />
         <SupportingText slide={slide} />
       </div>
     );
@@ -755,18 +771,18 @@ function CoverLayout({ slide, balanced }: { slide: InstagramSlide; balanced: boo
       }}
     >
       <div style={{ display: "flex", flexDirection: "column", paddingTop: balanced ? 0 : 32 }}>
-        <Headline slide={slide} />
+        <Headline slide={slide} cover />
         <SupportingText slide={slide} />
       </div>
       <div
         style={{
           display: "flex",
-          width: balanced ? "86%" : "74%",
-          maxHeight: balanced ? 330 : 285,
-          marginTop: balanced ? 66 : 0,
-          alignSelf: balanced ? "center" : "flex-start",
+          width: "100%",
+          maxHeight: balanced ? 410 : 360,
+          marginTop: balanced ? 40 : 0,
+          alignSelf: "center",
           overflow: "hidden",
-          opacity: 0.88,
+          opacity: 1,
         }}
       >
         <Visual slide={slide} />
@@ -782,7 +798,7 @@ function FinalLayout({ slide, balanced, handle }: { slide: InstagramSlide; balan
         display: "flex",
         flex: 1,
         flexDirection: "column",
-        justifyContent: balanced ? "center" : "flex-start",
+        justifyContent: "space-between",
       }}
     >
       <div style={{ display: "flex", flexDirection: "column", paddingTop: 8 }}>
@@ -792,12 +808,12 @@ function FinalLayout({ slide, balanced, handle }: { slide: InstagramSlide; balan
       <div
         style={{
           display: "flex",
-          flex: balanced ? 0 : 1,
-          minHeight: balanced ? 320 : 0,
+          flex: 1,
+          minHeight: balanced ? 340 : 0,
           alignItems: "center",
           width: "100%",
-          marginTop: balanced ? 44 : 0,
-          padding: "24px 0",
+          marginTop: balanced ? 20 : 0,
+          padding: "16px 0",
         }}
       >
         <Visual slide={slide} />
@@ -806,7 +822,7 @@ function FinalLayout({ slide, balanced, handle }: { slide: InstagramSlide; balan
         style={{
           display: "flex",
           flexDirection: "column",
-          marginTop: balanced ? 38 : 0,
+          marginTop: balanced ? 18 : 0,
           paddingTop: 25,
           borderTop: `1px solid ${COLORS.border}`,
         }}
@@ -828,10 +844,12 @@ function HybridTextPanel({
   slide,
   compact = false,
   fullWidth = false,
+  cover = false,
 }: {
   slide: InstagramSlide;
   compact?: boolean;
   fullWidth?: boolean;
+  cover?: boolean;
 }) {
   return (
     <div
@@ -839,12 +857,12 @@ function HybridTextPanel({
         display: "flex",
         flexDirection: "column",
         width: "100%",
-        padding: fullWidth ? "34px 38px 38px" : "28px 30px",
+        padding: fullWidth ? "40px 44px 44px" : cover ? "38px 40px 42px" : "32px 34px 36px",
         borderTop: `1px solid ${COLORS.border}`,
-        background: "rgba(10,10,10,0.92)",
+        background: "rgba(10,10,10,0.88)",
       }}
     >
-      <Headline slide={slide} compact={compact} />
+      <Headline slide={slide} compact={compact} cover={cover} />
       <SupportingText slide={slide} compact={compact} />
     </div>
   );
@@ -852,7 +870,8 @@ function HybridTextPanel({
 
 function HybridCoverLayout({ slide }: { slide: InstagramSlide }) {
   const composition = slide.visual_plan?.composition ?? "headline_top";
-  const alignBottom = composition === "visual_top" || composition === "text_bottom";
+  const alignBottom =
+    composition === "visual_top" || composition === "text_bottom" || composition.startsWith("split_");
   const alignRight = composition === "split_right";
   return (
     <div
@@ -866,13 +885,14 @@ function HybridCoverLayout({ slide }: { slide: InstagramSlide }) {
       <div
         style={{
           display: "flex",
-          width: composition === "text_bottom" ? "100%" : composition.startsWith("split_") ? "58%" : "78%",
+          width: composition === "text_bottom" ? "100%" : composition.startsWith("split_") ? "68%" : "92%",
         }}
       >
         <HybridTextPanel
           slide={slide}
           compact={composition.startsWith("split_")}
           fullWidth={composition === "text_bottom"}
+          cover
         />
       </div>
     </div>
@@ -894,7 +914,7 @@ function HybridMiddleLayout({ slide }: { slide: InstagramSlide }) {
         paddingBottom: atBottom ? 10 : 0,
       }}
     >
-      <div style={{ display: "flex", width: composition === "text_bottom" ? "100%" : split ? "48%" : "78%" }}>
+      <div style={{ display: "flex", width: composition === "text_bottom" ? "100%" : split ? "56%" : "86%" }}>
         <HybridTextPanel slide={slide} compact fullWidth={composition === "text_bottom"} />
       </div>
     </div>
@@ -914,10 +934,10 @@ function HybridFinalLayout({ slide, handle }: { slide: InstagramSlide; handle: s
       <div
         style={{
           display: "flex",
-          width: "82%",
+          width: "92%",
           flexDirection: "column",
-          padding: "14px 20px 28px 0",
-          background: "rgba(10,10,10,0.92)",
+          padding: "20px 26px 32px 0",
+          background: "rgba(10,10,10,0.88)",
         }}
       >
         <Headline slide={slide} compact />
@@ -977,7 +997,7 @@ function GeneratedVisualLayer({ source }: { source: string | null }) {
           display: "flex",
           position: "absolute",
           inset: 0,
-          background: "rgba(10,10,10,0.18)",
+          background: "rgba(10,10,10,0.12)",
         }}
       />
     </div>
@@ -1002,13 +1022,13 @@ function MiddleLayout({ slide, balanced }: { slide: InstagramSlide; balanced: bo
   const split = composition === "split_left" || composition === "split_right";
   if (split) {
     const text = (
-      <div style={{ display: "flex", width: "44%", flexDirection: "column", justifyContent: "center" }}>
+      <div style={{ display: "flex", width: "48%", flexDirection: "column", justifyContent: "center" }}>
         <Headline slide={slide} compact />
         <SupportingText slide={slide} compact />
       </div>
     );
     const visual = (
-      <div style={{ display: "flex", width: "51%", alignItems: "center" }}>
+      <div style={{ display: "flex", width: "49%", alignItems: "center" }}>
         <Visual slide={slide} />
       </div>
     );
@@ -1027,14 +1047,14 @@ function MiddleLayout({ slide, balanced }: { slide: InstagramSlide; balanced: bo
           display: "flex",
           flex: 1,
           flexDirection: "column",
-          justifyContent: balanced ? "center" : "space-between",
+          justifyContent: "center",
         }}
       >
         <div
           style={{
             display: "flex",
-            minHeight: balanced ? 350 : 420,
-            marginBottom: balanced ? 48 : 0,
+            minHeight: balanced ? 420 : 470,
+            marginBottom: balanced ? 38 : 0,
             alignItems: "center",
           }}
         ><Visual slide={slide} /></div>
@@ -1048,10 +1068,19 @@ function MiddleLayout({ slide, balanced }: { slide: InstagramSlide; balanced: bo
 
   if (composition === "centered") {
     return (
-      <div style={{ display: "flex", flex: 1, flexDirection: "column", justifyContent: "center" }}>
-        <div style={{ display: "flex", width: "86%", alignSelf: "center", marginBottom: 44 }}><Visual slide={slide} /></div>
-        <Headline slide={slide} compact />
-        <SupportingText slide={slide} />
+      <div
+        style={{
+          display: "flex",
+          flex: 1,
+          flexDirection: "column",
+          justifyContent: "center",
+        }}
+      >
+        <div style={{ display: "flex", width: "100%", alignSelf: "center", marginBottom: 42 }}><Visual slide={slide} /></div>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <Headline slide={slide} compact />
+          <SupportingText slide={slide} />
+        </div>
       </div>
     );
   }
@@ -1074,9 +1103,9 @@ function MiddleLayout({ slide, balanced }: { slide: InstagramSlide; balanced: bo
           style={{
             display: "flex",
             flex: balanced ? 0 : 1,
-            minHeight: balanced ? 350 : 0,
+            minHeight: balanced ? 410 : 0,
             alignItems: "center",
-            marginTop: balanced ? 48 : 28,
+            marginTop: balanced ? 32 : 24,
           }}
         ><Visual slide={slide} /></div>
       </div>
@@ -1089,7 +1118,7 @@ function MiddleLayout({ slide, balanced }: { slide: InstagramSlide; balanced: bo
         display: "flex",
         flex: 1,
         flexDirection: "column",
-        justifyContent: balanced ? "center" : "space-between",
+        justifyContent: "space-between",
       }}
     >
       <div style={{ display: "flex", flexDirection: "column", paddingTop: 8 }}>
@@ -1100,8 +1129,8 @@ function MiddleLayout({ slide, balanced }: { slide: InstagramSlide; balanced: bo
         style={{
           display: "flex",
           width: "100%",
-          minHeight: balanced ? 350 : 320,
-          marginTop: balanced ? 48 : 0,
+          minHeight: balanced ? 410 : 360,
+          marginTop: balanced ? 30 : 0,
           alignItems: "center",
           paddingBottom: 16,
         }}

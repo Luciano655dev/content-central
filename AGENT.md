@@ -78,7 +78,7 @@ Run **3 planned searches** covering the original/official source, practical conf
 ## Step 6 — Social session: write Twitter and Instagram
 
 1. **Twitter thread** per `playbook/twitter.md` — 5–8 informal, conversational tweets. Open with the forceful sentence, prove it immediately, and never end any sentence with `.`. Keep it quick enough to understand while scrolling
-2. **Instagram carousel** per `playbook/instagram.md` and `playbook/instagram-visual-system.md` — 5–8 instantly scannable slides. Make slide 1 identify the problem or payoff at a glance. Use meaningful structured graphics throughout, but built-in `$imagegen` artwork on only **2–4 slides and never every slide**. Generated artwork must be simple, symbolic, and useful; never complex, realistic decoration. Content Central owns exact typography and gives it a deliberate panel or region over the background
+2. **Instagram carousel** per `playbook/instagram.md` and `playbook/instagram-visual-system.md` — 5–8 instantly scannable, attention-first slides. Make slide 1 identify the problem or payoff with massive feed-readable typography and a full, purposeful composition. Use meaningful structured graphics throughout, but built-in `$imagegen` artwork on only **2–4 slides and never every slide**. Generated artwork must be simple, symbolic, and useful; never complex, realistic decoration. Content Central owns exact typography and gives it a deliberate, tightly sized panel or region over the background
 
 Twitter and Instagram share this social research and topic. They do not reuse the article research.
 
@@ -97,8 +97,8 @@ Now switch roles: you are a harsh editor seeing this for the first time. Check:
 - [ ] TabNews reads like a Brazilian dev wrote it, not like a translation; título ≤70 chars
 - [ ] Social topic is distinct from the article topic and has its own sources
 - [ ] Every tweet ≤280 chars and sounds like a useful message from a smart friend, not an article; tweet 1 is forceful and concrete; no sentence ends with `.`
-- [ ] Cover claim is visible and understandable in one glance; the viewer knows immediately whether the post is for them
-- [ ] Instagram: every `accent_phrase` appears in its title; every slide has a meaningful structured visual; middle copy is compact and useful; layouts vary; the caption is informal, useful, saveable, and has exactly 5 hashtags
+- [ ] Cover claim dominates at thumbnail size, is visible and understandable in one glance, and the viewer knows immediately whether the post is for them
+- [ ] Instagram: every `accent_phrase` appears in its title; every slide has a large meaningful structured visual; middle copy is compact and useful; layouts use the canvas without dead zones; the caption is informal, useful, saveable, and has exactly 5 hashtags
 - [ ] Generated artwork appears on only 2–4 slides, never all slides; every generated image is simple, meaningful, text-free, and leaves a deliberate region for typography
 - [ ] Twitter images: every `image_slide` is a valid 1-based Instagram slide and genuinely matches that tweet; unmatched tweets have no forced image
 - [ ] Project mention (if any): would the piece lose something if cut? If no — cut it

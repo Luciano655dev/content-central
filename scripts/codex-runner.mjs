@@ -111,7 +111,7 @@ const prompt = claim.scope === "all"
         : "Create today's scheduled post.",
       "Run two independent research sessions: deep technical research for Dev.to and TabNews, then separate quick-useful research for Twitter and Instagram. The two sessions must have distinct topics, rationales, and sources.",
       "Save the validated result to .data/bundle.json.",
-      "For Instagram, use built-in $imagegen only on a few slides where simple meaningful artwork improves the idea. Keep the remaining slides as clean structured graphics. Save selected artwork inside .data/generated and set generated_visual_path plus generated_visual_alt only on those slides.",
+      "For Instagram, make an attention-first carousel with massive cover typography, compact spacing, large purpose-built graphics, and no dead zones. Use built-in $imagegen only on a few slides where simple meaningful artwork improves the idea. Keep the remaining slides as bold structured graphics. Save selected artwork inside .data/generated and set generated_visual_path plus generated_visual_alt only on those slides.",
       "Do not upload it yourself; the trusted local runner will ingest it after you finish.",
       "Do not use any model API key, SDK, Claude, or Anthropic.",
     ].join(" ")
@@ -128,8 +128,8 @@ const prompt = claim.scope === "all"
           "Use $daily-content for an explicit social-session replacement run.",
           "Open .data/bundle.json and choose a new quick, useful social topic, run fresh independent research, then regenerate social_topic, social_topic_rationale, social_research_sources, twitter, and instagram.",
           "Keep date, topic, topic_rationale, research_sources, devto, tabnews, project_mentions, and every other protected field unchanged.",
-          "Make Twitter highly informal, start forcefully, and never end a sentence with a period. Make Instagram instantly scannable and saveable.",
-          "Use built-in $imagegen only on a few slides, with simple meaningful artwork and clear space for the deterministic text layer. Leave the other slides without generated artwork.",
+          "Make Twitter highly informal, start forcefully, and never end a sentence with a period. Make Instagram instantly scannable, saveable, bold, and visually full.",
+          "Use massive cover typography, compact spacing, and large purpose-built components. Use built-in $imagegen only on a few slides, with simple meaningful artwork composed around a tightly sized deterministic text layer. Leave the other slides without generated artwork.",
           "Assign a new render_revision, save selected artwork inside .data/generated, and set generated_visual_path plus generated_visual_alt only on those slides.",
           "Save the complete validated bundle back to .data/bundle.json. Do not upload it yourself.",
         ].join(" ")
@@ -138,7 +138,7 @@ const prompt = claim.scope === "all"
       `Open .data/bundle.json and regenerate only the ${claim.scope} field for that existing post.`,
       "Keep both sessions' topic, rationale, research sources, project_mentions, and every other platform field exactly unchanged.",
       claim.scope === "instagram"
-        ? "Follow the current instagram-visual-system.md prompt, create materially new topic-specific compositions and visuals, and assign a new unique render_revision. Use built-in $imagegen on only a few slides for simple text-free artwork; save those assets inside .data/generated and set generated_visual_path plus generated_visual_alt only on those slides. Preserve Twitter text and image_slide mappings."
+        ? "Follow the current instagram-visual-system.md prompt, create materially new attention-first topic-specific compositions and visuals, and assign a new unique render_revision. Use massive cover typography, compact spacing, large purpose-built components, and no dead zones. Use built-in $imagegen on only a few slides for simple text-free artwork composed around the exact text region; save those assets inside .data/generated and set generated_visual_path plus generated_visual_alt only on those slides. Preserve Twitter text and image_slide mappings."
         : "Preserve the existing Instagram carousel and its render_revision.",
       claim.scope === "twitter"
         ? "Write in the current highly informal style, never end a sentence with a period, and reuse only genuinely matching existing Instagram slides through image_slide; do not regenerate Instagram."

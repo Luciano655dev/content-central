@@ -6,14 +6,14 @@ Use built-in `$imagegen` artwork on only **2–4 slides and never every slide**.
 
 ## Mandatory brand system
 
-- Canvas: 1080×1350 px, portrait 4:5, 72 px safe margins
+- Canvas: 1080×1350 px, portrait 4:5, 60–68 px safe margins
 - Background `#0A0A0A`; panels `#111111` / `#141414`; border `#232323`
 - Primary text `#F3F3F0`; secondary `#9A9A95`; muted `#6F6F69`
 - Sole accent `#C7F246`; optional diagram lines `#3A3A36`
 - Headline/body: Inter (Helvetica Neue/Arial fallback)
 - Accent phrase: Instrument Serif Italic (Georgia/Times fallback), lime
 - Code/labels: IBM Plex Mono (SFMono/Menlo/Consolas fallback)
-- Minimal, premium, informal, high contrast, generous negative space
+- Bold editorial, premium, informal, high contrast, compact spacing
 - Never use blue, purple, gradients, badges, slide counters, swipe text, clutter, generic icons, or a startup-ad look
 - One main idea per slide. Mobile readability wins over decoration.
 
@@ -33,14 +33,15 @@ Optimize for saves, shares, and “wait, that’s useful.” Format: 4:5 portrai
 
 ## Slide 1 — the cover (this is 80% of the result)
 
-- ONE bold claim, normally 4–8 words, set in huge type. It is a billboard, not a paragraph
+- ONE bold claim, ideally 3–7 words, set in massive type and occupying roughly half the canvas. It is a billboard, not a paragraph
 - Name the exact pain, shortcut, payoff, or surprising fact so the right person recognizes it immediately
 - Must work as a standalone post — most viewers never swipe
-- `visual_tip`: describe the intended composition in one sentence, consistent with the mandatory brand system. No decoration that competes with the words
+- Pair the hook with one large topic-specific visual, crop, contrast block, or purpose-built component so the cover feels full rather than sparse
+- `visual_tip`: describe the intended attention path and how the text and visual fill the canvas in one sentence. No decoration that competes with the words
 
 ## Slides 2 to N-1
 
-- One instantly understandable idea per slide: title ≤8 words, body normally **8–28 words** and never more than 36
+- One instantly understandable idea per slide: title ≤8 words in large type, body normally **8–28 words** and never more than 36
 - The body adds the useful action, example, condition, limitation, or payoff without turning into a lesson
 - Prefer one or two casual sentences. Use plain words and contractions
 - Delete vague copy such as “this causes problems” or “use the right tool.” Name what changes, where the value travels, why it breaks, or which tool to choose
@@ -48,6 +49,7 @@ Optimize for saves, shares, and “wait, that’s useful.” Format: 4:5 portrai
 - Rhythm: vary meaningful visual grammar and composition on every slide; never alternate in typography-only filler
 - Number the steps when there's a sequence — numbered progress pulls swipes
 - Keep visual consistency: the renderer applies the brand system automatically; use the visual tip for composition, not repeated palette instructions
+- Make each structured component fill its region and look native to its purpose; avoid generic small cards floating in the middle
 
 ## Final slide — CTA
 
