@@ -35,7 +35,7 @@ export default function InstagramView({
         </div>
       </div>
 
-      <ol className="flex flex-col gap-4">
+      <ol className="grid gap-x-5 gap-y-7 md:grid-cols-2">
         {instagram.slides.map((slide, i) => (
           <li key={i}>
             <div className="mb-1.5 flex items-center justify-between gap-3 px-1">
@@ -53,7 +53,7 @@ export default function InstagramView({
                 <CopyButton text={`${slide.title}\n${slide.body}`} label="Copy" />
               </div>
             </div>
-            <div className="overflow-hidden rounded-lg border border-border bg-[#0A0A0A]">
+            <div className="overflow-hidden rounded-xl border border-border bg-[#0A0A0A]">
               <Image
                 unoptimized
                 src={`/api/posts/${encodeURIComponent(postId)}/instagram/${i + 1}?v=${revision}`}
@@ -64,7 +64,7 @@ export default function InstagramView({
               />
             </div>
             {slide.visual_tip && (
-              <div className="mt-2 flex items-start gap-2.5 rounded-lg border-l-2 border-accent bg-accent/8 p-3 pl-4">
+              <div className="mt-2 flex items-start gap-2.5 rounded-lg bg-surface p-3">
                 <Palette className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
                 <p className="text-sm leading-relaxed text-foreground/80">{slide.visual_tip}</p>
               </div>
@@ -74,12 +74,12 @@ export default function InstagramView({
       </ol>
 
       {instagram.caption && (
-        <div className="mt-6">
+        <div className="mt-10 border-t border-border pt-8">
           <div className="mb-1.5 flex items-center justify-between px-1">
             <span className="text-sm text-muted">Caption</span>
             <CopyButton text={instagram.caption} label="Copy caption" />
           </div>
-          <div className="rounded-lg border border-border bg-surface p-5">
+          <div className="rounded-xl bg-surface p-5">
             <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground/90">
               {instagram.caption}
             </p>

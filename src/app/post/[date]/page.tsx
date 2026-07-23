@@ -6,6 +6,8 @@ import { formatDate } from "@/lib/format";
 import PostView from "@/components/PostView";
 import ThemeToggle from "@/components/ThemeToggle";
 import DeletePostButton from "@/components/DeletePostButton";
+import AutomationStatusBar from "@/components/AutomationStatusBar";
+import { getAutomationState } from "@/lib/automation";
 import {
   CONTENT_SESSIONS,
   PLATFORMS,
@@ -38,26 +40,28 @@ export default async function PostPage(props: {
       ? (requestedPlatform as Platform)
       : SESSION_PLATFORMS[initialSession][0];
 
-  const post = await getStore().getPost(id);
+  const [post, automation] = await Promise.all([getStore().getPost(id), getAutomationState()]);
   if (!post) notFound();
 
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-10 md:py-14">
-      <div className="mb-10 flex items-center justify-between">
+    <main className="mx-auto w-full max-w-4xl flex-1 px-5 py-8 sm:px-6 md:py-12">
+      <div className="mb-8 flex items-center justify-between border-b border-border pb-6">
         <Link
           href="/"
           className="inline-flex items-center gap-1.5 text-sm text-muted transition-colors hover:text-foreground"
         >
-          <ArrowLeft className="h-4 w-4" /> All drops
+          <ArrowLeft className="h-4 w-4" /> Content Central
         </Link>
         <ThemeToggle />
       </div>
 
-      <header className="mb-10">
-        <p className="mb-2 font-mono text-xs uppercase tracking-widest text-muted">
+      <AutomationStatusBar initialState={automation} />
+
+      <header className="mb-8">
+        <p className="mb-1 text-xs font-medium uppercase tracking-[0.16em] text-muted">
           {formatDate(post.date)}
         </p>
-        <p className="text-sm text-muted">Daily content drop · two independent research sessions</p>
+        <p className="text-sm text-muted">Daily content drop</p>
       </header>
 
       <PostView post={post} initialSession={initialSession} initialPlatform={initialPlatform} />

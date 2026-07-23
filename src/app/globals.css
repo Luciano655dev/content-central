@@ -3,12 +3,13 @@
 /* ---------- Theme tokens ---------- */
 
 :root {
+  color-scheme: light;
   --background: #ffffff;
-  --surface: #fafafa;
-  --surface-2: #f2f2f2;
-  --border: #e4e4e7;
-  --foreground: #18181b;
-  --muted: #71717a;
+  --surface: #f8f8f8;
+  --surface-2: #eeeeef;
+  --border: #e5e5e7;
+  --foreground: #171719;
+  --muted: #73737b;
   --accent: #2563eb;
   --success: #16a34a;
   --warning: #d97706;
@@ -16,12 +17,13 @@
 }
 
 :root[data-theme="dark"] {
-  --background: #101012;
-  --surface: #17171a;
-  --surface-2: #1e1e22;
-  --border: #29292e;
-  --foreground: #ececee;
-  --muted: #8f8f96;
+  color-scheme: dark;
+  --background: #101113;
+  --surface: #17181b;
+  --surface-2: #202125;
+  --border: #292b30;
+  --foreground: #f0f0f1;
+  --muted: #9899a1;
   --accent: #7aa2ff;
   --success: #4ade80;
   --warning: #fbbf24;
@@ -30,12 +32,13 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --background: #101012;
-    --surface: #17171a;
-    --surface-2: #1e1e22;
-    --border: #29292e;
-    --foreground: #ececee;
-    --muted: #8f8f96;
+    color-scheme: dark;
+    --background: #101113;
+    --surface: #17181b;
+    --surface-2: #202125;
+    --border: #292b30;
+    --foreground: #f0f0f1;
+    --muted: #9899a1;
     --accent: #7aa2ff;
     --success: #4ade80;
     --warning: #fbbf24;
@@ -54,19 +57,26 @@
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-code-bg: var(--code-bg);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-serif: var(--font-newsreader);
+  --font-sans: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
+  --font-serif: "Newsreader", Georgia, serif;
 }
 
 body {
+  min-width: 320px;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), system-ui, sans-serif;
+  text-rendering: optimizeLegibility;
 }
 
 button:not(:disabled) {
   cursor: pointer;
+}
+
+:where(a, button, input, summary):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
 }
 
 ::selection {

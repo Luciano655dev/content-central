@@ -7,7 +7,7 @@ import type { AutomationState } from "@/lib/automation";
 import type { RunScope } from "@/lib/automation";
 import type { Platform } from "@/lib/types";
 import { PLATFORM_LABELS } from "@/lib/types";
-import { AutomationRunProgress } from "./AutomationRunProgress";
+import { publishAutomationState } from "@/lib/automation-client";
 
 export default function RerunButton({
   postId,
@@ -74,6 +74,7 @@ export default function RerunButton({
       const body = (await response.json()) as AutomationState & { error?: string };
       if (!response.ok) throw new Error(body.error ?? `Could not ${scopeLabel.toLowerCase()}`);
       setState(body);
+      publishAutomationState(body);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Could not queue the rerun");
     } finally {
@@ -83,15 +84,13 @@ export default function RerunButton({
 
   const working = submitting || active;
   const succeeded = state?.status === "succeeded" && belongsToButton;
-  const showProgress = belongsToButton && state?.status !== "idle";
-
   return (
-    <div className="relative flex flex-col items-end gap-1">
+    <div className="flex flex-col items-end gap-1">
       <button
         type="button"
         onClick={rerun}
         disabled={working}
-        className="inline-flex items-center justify-center gap-1.5 rounded-md border border-border px-3 py-2 text-sm font-medium text-foreground transition-colors hover:border-muted disabled:cursor-not-allowed disabled:opacity-50"
+        className="inline-flex items-center justify-center gap-1.5 rounded-md bg-surface px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-surface-2 disabled:cursor-not-allowed disabled:opacity-50"
         aria-label={scopeLabel}
       >
         {submitting || activeForButton ? (
@@ -108,11 +107,6 @@ export default function RerunButton({
               : scopeLabel}
       </button>
       {error && <span className="max-w-56 text-right text-xs text-warning">{error}</span>}
-      {showProgress && state ? (
-        <div className="absolute right-0 top-[calc(100%+0.5rem)] z-30 w-[min(24rem,calc(100vw-3rem))]">
-          <AutomationRunProgress state={state} />
-        </div>
-      ) : null}
     </div>
   );
 }

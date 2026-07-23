@@ -33,7 +33,7 @@ export default function CopyButton({
   return (
     <button
       onClick={copy}
-      className={`inline-flex items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-sm text-muted transition-colors hover:text-foreground ${className}`}
+      className={`inline-flex items-center gap-1.5 rounded-md bg-surface px-3 py-1.5 text-sm text-muted transition-colors hover:bg-surface-2 hover:text-foreground ${className}`}
     >
       {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
       {copied ? "Copied" : label}

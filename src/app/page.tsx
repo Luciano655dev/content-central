@@ -3,6 +3,7 @@ import { CONTENT_SESSIONS, type ContentSession, type PostSummary } from "@/lib/t
 import ThemeToggle from "@/components/ThemeToggle";
 import AutomationControls from "@/components/AutomationControls";
 import HomeSessionTabs from "@/components/HomeSessionTabs";
+import AutomationStatusBar from "@/components/AutomationStatusBar";
 import { getAutomationState } from "@/lib/automation";
 
 export const dynamic = "force-dynamic";
@@ -27,17 +28,19 @@ export default async function Home(props: {
     : "articles";
 
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-12 md:py-16">
-      <header className="mb-14 flex items-start justify-between gap-4">
+    <main className="mx-auto w-full max-w-4xl flex-1 px-5 py-8 sm:px-6 md:py-12">
+      <header className="mb-8 flex items-start justify-between gap-4 border-b border-border pb-6">
         <div>
-          <h1 className="font-serif text-3xl text-foreground">Content Central</h1>
-          <p className="mt-1 text-sm text-muted">Two research sessions, one daily content drop</p>
+          <h1 className="text-xl font-semibold tracking-tight text-foreground">Content Central</h1>
+          <p className="mt-1 text-sm text-muted">Research, write, review, publish</p>
         </div>
         <ThemeToggle />
       </header>
 
+      <AutomationStatusBar initialState={automation} />
+
       {storeError && (
-        <p className="mb-8 border-l-2 border-warning pl-4 text-sm text-muted">
+        <p className="mb-8 rounded-lg bg-warning/10 px-4 py-3 text-sm text-warning">
           Couldn&apos;t load posts: {storeError}
         </p>
       )}

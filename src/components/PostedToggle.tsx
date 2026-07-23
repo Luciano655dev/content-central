@@ -49,7 +49,7 @@ export default function PostedToggle({
       className={`inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm transition-colors ${
         posted
           ? "border-success/40 bg-success/10 text-success"
-          : "border-border text-muted hover:text-foreground"
+          : "border-transparent bg-surface text-muted hover:bg-surface-2 hover:text-foreground"
       }`}
     >
       {posted && <Check className="h-3.5 w-3.5" />}

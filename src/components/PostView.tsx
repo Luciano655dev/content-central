@@ -55,7 +55,7 @@ export default function PostView({
 
   return (
     <div>
-      <nav className="mb-8 grid grid-cols-2 gap-2 rounded-xl border border-border bg-surface p-1.5">
+      <nav className="mb-8 flex border-b border-border" aria-label="Content session">
         {(["articles", "social"] as ContentSession[]).map((item) => {
           const Icon = item === "articles" ? FileText : MessagesSquare;
           return (
@@ -63,8 +63,9 @@ export default function PostView({
               key={item}
               type="button"
               onClick={() => selectSession(item)}
-              className={`rounded-lg px-4 py-3 text-left transition-colors ${
-                session === item ? "bg-background text-foreground shadow-sm" : "text-muted hover:text-foreground"
+              aria-pressed={session === item}
+              className={`relative flex-1 px-2 py-3 text-left transition-colors sm:px-4 ${
+                session === item ? "text-foreground" : "text-muted hover:text-foreground"
               }`}
             >
               <span className="flex items-center gap-2 text-sm font-medium">
@@ -73,6 +74,7 @@ export default function PostView({
               <span className="mt-1 block text-xs text-muted">
                 {item === "articles" ? "Dev.to + TabNews" : "Twitter + Instagram"}
               </span>
+              {session === item && <span className="absolute inset-x-2 -bottom-px h-0.5 bg-foreground sm:inset-x-4" />}
             </button>
           );
         })}
@@ -81,10 +83,10 @@ export default function PostView({
       <header className="mb-8">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="max-w-2xl">
-            <p className="mb-2 font-mono text-xs uppercase tracking-widest text-muted">
+            <p className="mb-2 text-xs font-medium uppercase tracking-[0.16em] text-muted">
               {session === "articles" ? "Technical research session" : "Quick social research session"}
             </p>
-            <h1 className="font-serif text-3xl leading-tight text-foreground md:text-4xl">{sessionTopic}</h1>
+            <h1 className="font-serif text-3xl leading-[1.08] text-foreground md:text-4xl">{sessionTopic}</h1>
           </div>
           <RerunButton
             key={`${session}-research-rerun`}
@@ -93,7 +95,7 @@ export default function PostView({
           />
         </div>
         {sessionRationale && (
-          <details className="group mt-6 border-t border-border">
+          <details className="group mt-6 border-y border-border">
             <summary className="cursor-pointer py-3 text-sm text-muted transition-colors hover:text-foreground [&::-webkit-details-marker]:hidden">
               Why this topic · research notes
             </summary>
@@ -123,23 +125,24 @@ export default function PostView({
         )}
       </header>
 
-      <div className="mb-8 flex flex-wrap items-center justify-between gap-3 border-b border-border">
-        <nav className="flex gap-1 overflow-x-auto">
+      <div className="mb-8 flex flex-col gap-2 border-y border-border py-2 sm:flex-row sm:items-center sm:justify-between">
+        <nav className="flex gap-1 overflow-x-auto" aria-label="Publishing platform">
           {platforms.map((p) => (
             <button
               key={p}
               onClick={() => selectTab(p)}
-              className={`relative inline-flex items-center gap-1.5 whitespace-nowrap px-3 py-3 text-sm transition-colors ${
+              aria-pressed={tab === p}
+              className={`relative inline-flex items-center gap-1.5 whitespace-nowrap rounded-md px-3 py-2 text-sm transition-colors ${
                 tab === p ? "text-foreground" : "text-muted hover:text-foreground"
               }`}
             >
               {PLATFORM_LABELS[p]}
               {status[p] && <Check className="h-3.5 w-3.5 text-success" />}
-              {tab === p && <span className="absolute inset-x-3 -bottom-px h-px bg-accent" />}
+              {tab === p && <span className="absolute inset-x-3 bottom-0 h-px bg-accent" />}
             </button>
           ))}
         </nav>
-        <div className="flex items-start gap-3 pb-2">
+        <div className="flex flex-wrap items-start gap-2 py-1">
           <RerunButton key={`${tab}-rerun`} postId={post.id} scope={tab} />
           <QuickPostButton post={post} platform={tab} />
           <PostedToggle
