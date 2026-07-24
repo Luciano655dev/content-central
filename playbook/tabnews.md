@@ -4,9 +4,11 @@ TabNews (tabnews.com.br) é a comunidade do Filipe Deschamps: devs brasileiros q
 
 ## A régua
 
-Você está escrevendo **o artigo definitivo sobre o tema em português** — o que a comunidade vai salvar e linkar quando o assunto aparecer. **2.000–3.200 palavras.** Menos que isso significa que partes do tema ficaram sem exploração, não que o tema é pequeno (tema pequeno nem deveria ter sido escolhido).
+Você está escrevendo um artigo que entrega um modelo mental útil e algo aplicável no mesmo dia. Ele precisa ter substância sem virar tarefa de casa: mire em **4–8 minutos de leitura**, normalmente **1.000–1.700 palavras**. A faixa flexível de **900–2.000 palavras** é aceitável quando o tema realmente pede.
 
-Profundidade, nunca enchimento: cada parágrafo novo precisa trazer algo concreto novo — exemplo, código, número com fonte, modo de falha, regra de decisão.
+Esses números orientam a edição; não são uma catraca rígida. Nunca encha um texto curto para bater meta e nunca corte uma explicação necessária só para caber no teto. Se ficou longo, estreite o recorte e remova exemplos repetidos. Cada parágrafo precisa trazer algo concreto novo — exemplo, código, número com fonte, modo de falha ou regra de decisão.
+
+A régua real de completude: no final, quem leu consegue explicar o mecanismo, aplicar a solução, reconhecer pelo menos uma falha de produção e tomar uma decisão técnica concreta. Um artigo gostoso de 1.400 palavras que faz isso vale mais que uma enciclopédia de 3.000.
 
 ## O que a comunidade pune (evitar a todo custo)
 
@@ -26,12 +28,13 @@ Profundidade, nunca enchimento: cada parágrafo novo precisa trazer algo concret
 ## Estrutura — arco narrativo
 
 - **NÃO é tradução do post em inglês.** É uma adaptação: mesmos fatos técnicos, texto reescrito do zero para a cultura da comunidade
-- Mesmo arco do artigo em inglês: cena do problema → por que a solução óbvia falha (quebre ela na frente do leitor) → o mecanismo por baixo (o núcleo do ensino — vá fundo) → construindo a solução real, passo a passo com código → realidade de produção (edge cases, custos, "o que me mordeu") → erros comuns (3–5, com o porquê) → recap + pergunta pra comunidade
+- Mesmo arco do artigo em inglês: cena do problema → por que a solução óbvia falha → mecanismo por baixo → solução real → realidade de produção → fechamento com pergunta. Junte etapas quando isso melhorar o ritmo; prefira **5–7 seções com propósito** a um catálogo longo
 - Abertura nas 2 primeiras linhas com cenário vivido ou afirmação surpreendente
-- **Cada seção precisa ter pelo menos um item concreto**: código executável, número com fonte, caso real nomeado, tabela ou diagrama. Seção só de prosa = seção pra reescrever
-- Pelo menos **3 blocos de código** e **um caso real de fonte nomeada** (postmortem, blog de engenharia, RFC, docs oficiais)
+- Ao longo do artigo, use pelo menos **3 artefatos concretos**: código executável, número com fonte, caso real nomeado, tabela ou diagrama. Coloque cada um onde ele esclarece o raciocínio; não enfie um artefato artificial em toda transição curta
+- Normalmente use **2–3 blocos de código** e **um caso real de fonte nomeada** (postmortem, blog de engenharia, RFC, docs oficiais). Se o tema for conceitual, um exemplo excelente mais um diagrama pode funcionar melhor que código inventado
 - **Teste da especificidade**: se uma frase serviria igual num artigo sobre outro tema, delete
 - Markdown completo: `##` para seções, blocos de código com linguagem, tabelas quando ajudarem
 - Parágrafos curtos, ritmo variado. PT-BR natural: "você", zero "portanto" empilhado
+- Linguagem um pouco mais técnica que a sessão social: nomeie APIs, mecanismos e falhas reais, mas explique tudo com palavras simples e sem vocabulário rebuscado
 - Exemplos localizados quando fizer sentido (Pix como exemplo de idempotência > Stripe, real > dólar, empresa BR > empresa americana)
 - Fechar com pergunta genuína para a comunidade — comentário é o que segura o post no "Relevantes"

@@ -31,8 +31,8 @@ export default async function LoginPage({
 
   return (
     <main className="flex min-h-screen items-center justify-center px-6">
-      <div className="w-full max-w-xs">
-        <h1 className="font-serif text-2xl text-foreground">Content Central</h1>
+      <div className="w-full max-w-sm rounded-2xl border border-border bg-surface p-6 sm:p-8">
+        <h1 className="text-xl font-semibold tracking-tight text-foreground">Content Central</h1>
         <p className="mt-1 text-sm text-muted">Enter your passcode to continue.</p>
         <form action={login} className="mt-6 flex flex-col gap-3">
           <input
@@ -40,12 +40,12 @@ export default async function LoginPage({
             name="password"
             placeholder="Passcode"
             autoFocus
-            className="w-full rounded-md border border-border bg-transparent px-3 py-2 text-foreground outline-none transition-colors focus:border-foreground"
+            className="w-full rounded-lg border border-border bg-background px-3 py-2.5 text-foreground outline-none transition-colors focus:border-foreground"
           />
           {error && <p className="text-sm text-red-500">Wrong passcode. Try again.</p>}
           <button
             type="submit"
-            className="rounded-md bg-foreground px-3 py-2 text-sm font-medium text-background transition-opacity hover:opacity-85"
+            className="rounded-lg bg-foreground px-3 py-2.5 text-sm font-medium text-background transition-opacity hover:opacity-85"
           >
             Enter
           </button>
